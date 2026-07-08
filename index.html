@@ -185,18 +185,23 @@
   .sponsor .name { font-weight: 700; font-size: 16px; }
   .sponsor .name.code { color: var(--ink-2); font-weight: 600; letter-spacing: .04em; }
   .sponsor .amt { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+  /* full-bleed white plaque across the top of the card; white in both
+     themes because business logos are drawn for light backgrounds */
   .logo-box {
-    width: 100%; min-height: 76px; margin-bottom: 4px;
+    margin: -16px -18px 6px;
+    min-height: 116px;
     display: flex; align-items: center; justify-content: center;
-    background: var(--paper); border: 1px solid var(--line-soft);
-    border-radius: 10px; padding: 10px;
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--line);
+    border-radius: 11px 11px 0 0;
+    padding: 14px 16px;
   }
-  .logo-box img { max-width: 100%; max-height: 58px; object-fit: contain; }
-  .sponsor-line { display: inline-flex; align-items: center; gap: 8px; }
+  .logo-box img { max-width: 82%; max-height: 88px; object-fit: contain; }
+  .sponsor-line { display: inline-flex; align-items: center; gap: 9px; }
   .sponsor-mini-logo {
-    width: 28px; height: 28px; object-fit: contain;
+    width: 34px; height: 34px; object-fit: contain;
     border: 1px solid var(--line-soft); border-radius: 6px;
-    background: var(--surface); padding: 3px; flex: none;
+    background: #FFFFFF; padding: 3px; flex: none;
   }
   .badge {
     display: inline-flex; align-items: center; gap: 5px;

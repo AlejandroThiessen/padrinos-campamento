@@ -37,6 +37,9 @@ Rules:
 - **monto**: whole pesos (number, no quotes, no commas).
 - **logo**: optional path to a public sponsor logo image, only for public sponsors.
   Keep files in `assets/logos/`; prefer PNG/WebP/JPG; do not use logos for anonymous sponsors.
+  The wall shows the logo on a white plaque up to ~88px tall, so ask for an image at
+  least ~400px wide; transparent or white background looks best. Crop away excess
+  whitespace around the mark before committing.
 - Donations of **$1,000+ with publico:true** automatically get the ★ camp-board badge;
   the page handles this — nothing extra to do.
 
