@@ -47,7 +47,10 @@ Add to the `GASTOS` array: `{ fecha: "2026-08-01", concepto: "Premios — ronda 
 
 ## Publishing
 
+Two different computers maintain this ledger — **always `git pull` before editing.**
+
 ```
+git pull
 git add index.html
 git commit -m "Donativo F-003: Ferretería López $2,500"
 git push
