@@ -185,6 +185,19 @@
   .sponsor .name { font-weight: 700; font-size: 16px; }
   .sponsor .name.code { color: var(--ink-2); font-weight: 600; letter-spacing: .04em; }
   .sponsor .amt { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .logo-box {
+    width: 100%; min-height: 76px; margin-bottom: 4px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--paper); border: 1px solid var(--line-soft);
+    border-radius: 10px; padding: 10px;
+  }
+  .logo-box img { max-width: 100%; max-height: 58px; object-fit: contain; }
+  .sponsor-line { display: inline-flex; align-items: center; gap: 8px; }
+  .sponsor-mini-logo {
+    width: 28px; height: 28px; object-fit: contain;
+    border: 1px solid var(--line-soft); border-radius: 6px;
+    background: var(--surface); padding: 3px; flex: none;
+  }
   .badge {
     display: inline-flex; align-items: center; gap: 5px;
     align-self: flex-start;
@@ -364,7 +377,7 @@ const CONFIG = {
 
 const PATROCINADORES = [
   { folio: "F-001", fecha: "2026-07-08", nombre: "CompuService", publico: true, monto: 1000 },
-  // { folio: "F-002", fecha: "2026-07-10", nombre: "Ferretería López", publico: true,  monto: 2500 },
+  // with logo: { folio: "F-002", fecha: "2026-07-10", nombre: "Ferretería López", publico: true, monto: 2500, logo: "assets/logos/ferreteria-lopez.png" },
   // anónimo: { folio: "F-003", fecha: "2026-07-11", nombre: "ÁGUILA-07", publico: false, monto: 1500 },
 ];
 
@@ -541,10 +554,14 @@ function render() {
     wall.innerHTML = sponsors.slice().sort((a, b) => b.monto - a.monto).map(p => {
       const onBoard = p.publico && p.monto >= CONFIG.umbralTablon;
       const nameCls = p.publico ? "name" : "name code";
+      const logo = p.publico && p.logo
+        ? `<div class="logo-box"><img src="${esc(p.logo)}" alt="${esc(p.nombre)} logo" loading="lazy"></div>`
+        : "";
       const tag = onBoard
         ? `<span class="badge">${esc(t.onBoard)}</span>`
         : (!p.publico ? `<span class="chip-anon">${esc(t.anon)}</span>` : "");
       return `<div class="sponsor${onBoard ? " on-board" : ""}">
+        ${logo}
         <span class="${nameCls}">${esc(p.nombre)}</span>
         <span class="amt">${fmt(p.monto)}</span>${tag}
       </div>`;
@@ -560,10 +577,13 @@ function render() {
     body.innerHTML = sponsors.map(p => {
       run += p.monto;
       const star = p.publico && p.monto >= CONFIG.umbralTablon ? ` <span class="star">★</span>` : "";
+      const logo = p.publico && p.logo
+        ? `<img class="sponsor-mini-logo" src="${esc(p.logo)}" alt="${esc(p.nombre)} logo" loading="lazy">`
+        : "";
       return `<tr>
         <td class="folio">${esc(p.folio)}</td>
         <td class="fecha">${esc(fmtDate(p.fecha))}</td>
-        <td>${esc(p.nombre)}${star}</td>
+        <td><span class="sponsor-line">${logo}<span>${esc(p.nombre)}${star}</span></span></td>
         <td class="num">${fmt(p.monto)}</td>
         <td class="num">${fmt(run)}</td>
       </tr>`;

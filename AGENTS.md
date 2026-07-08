@@ -18,6 +18,13 @@ or *"someone gave 800, anonymous"*. Add one object to the `PATROCINADORES` array
 { folio: "F-003", fecha: "2026-07-21", nombre: "Ferretería López", publico: true, monto: 2500 },
 ```
 
+If the organizer provides a sponsor logo, save the image under `assets/logos/`
+using a lowercase/kebab-case filename, then add a `logo` field:
+
+```js
+{ folio: "F-003", fecha: "2026-07-21", nombre: "Ferretería López", publico: true, monto: 2500, logo: "assets/logos/ferreteria-lopez.png" },
+```
+
 Rules:
 - **folio**: sequential receipt number — next unused `F-###` (F-001, F-002, …).
   Tell the organizer the folio so they can write it on the sponsor's paper receipt.
@@ -28,6 +35,8 @@ Rules:
   sponsor's paper receipt so they can verify their own row later.
 - **publico**: `true` if the business wants its name shown, `false` for anonymous.
 - **monto**: whole pesos (number, no quotes, no commas).
+- **logo**: optional path to a public sponsor logo image, only for public sponsors.
+  Keep files in `assets/logos/`; prefer PNG/WebP/JPG; do not use logos for anonymous sponsors.
 - Donations of **$1,000+ with publico:true** automatically get the ★ camp-board badge;
   the page handles this — nothing extra to do.
 
