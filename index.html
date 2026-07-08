@@ -274,7 +274,6 @@
       <span class="eyebrow" data-i18n="eyebrow"></span>
       <span class="controls">
         <button class="ctl" id="langBtn" type="button">English</button>
-        <button class="ctl" id="demoBtn" type="button" data-i18n="demoOn"></button>
       </span>
     </div>
     <h1 data-i18n="title"></h1>
@@ -376,9 +375,8 @@ const CONFIG = {
 };
 
 const PATROCINADORES = [
-  { folio: "F-001", fecha: "2026-07-08", nombre: "CompuService", publico: true, monto: 1000, logo: "assets/logos/compuservice.jpg" },
-  // with logo: { folio: "F-002", fecha: "2026-07-10", nombre: "Ferretería López", publico: true, monto: 2500, logo: "assets/logos/ferreteria-lopez.png" },
-  // anónimo: { folio: "F-003", fecha: "2026-07-11", nombre: "ÁGUILA-07", publico: false, monto: 1500 },
+  // with logo: { folio: "F-001", fecha: "2026-07-10", nombre: "Ferretería López", publico: true, monto: 2500, logo: "assets/logos/ferreteria-lopez.png" },
+  // anónimo: { folio: "F-002", fecha: "2026-07-11", nombre: "ÁGUILA-07", publico: false, monto: 1500 },
 ];
 
 const GASTOS = [
@@ -486,7 +484,6 @@ const STR = {
 };
 
 let lang = "es";
-let demo = false;
 
 const fmt = v => new Intl.NumberFormat(STR[lang].locale,
   { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(v);
@@ -513,12 +510,10 @@ function render() {
     if (t[key]) el.textContent = t[key];
   });
   document.getElementById("langBtn").textContent = lang === "es" ? "English" : "Español";
-  document.getElementById("demoBtn").textContent = demo ? t.demoOff : t.demoOn;
-  document.body.classList.toggle("demo", demo);
 
-  const sponsors = (demo ? DEMO_PATROCINADORES : PATROCINADORES)
+  const sponsors = PATROCINADORES
     .slice().sort((a, b) => a.folio.localeCompare(b.folio));
-  const gastos = demo ? DEMO_GASTOS : GASTOS;
+  const gastos = GASTOS;
 
   const raised = sponsors.reduce((s, p) => s + p.monto, 0);
   const spent = gastos.reduce((s, g) => s + g.monto, 0);
@@ -607,10 +602,6 @@ function render() {
 
 document.getElementById("langBtn").addEventListener("click", () => {
   lang = lang === "es" ? "en" : "es";
-  render();
-});
-document.getElementById("demoBtn").addEventListener("click", () => {
-  demo = !demo;
   render();
 });
 
