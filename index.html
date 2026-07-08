@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Padrinos del Campamento — Transparencia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --paper: #F7FAF7;
+    --surface: #FFFFFF;
+    --ink: #1C2620;
+    --ink-2: #47564D;
+    --ink-3: #6E7F74;
+    --line: #DCE5DD;
+    --line-soft: #E8EFE9;
+    --accent: #1E6B47;
+    --accent-strong: #155436;
+    --accent-soft: #E3F0E8;
+    --gold: #9A7318;
+    --gold-soft: #F6EED8;
+    --meter-track: #E4ECE5;
+    --shadow: 0 1px 2px rgba(28,38,32,.06), 0 4px 14px rgba(28,38,32,.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #111814;
+      --surface: #18211B;
+      --ink: #E8EFE9;
+      --ink-2: #A9BAAE;
+      --ink-3: #7E9084;
+      --line: #2A362E;
+      --line-soft: #222D26;
+      --accent: #52B586;
+      --accent-strong: #6FCA9C;
+      --accent-soft: #1D3327;
+      --gold: #D9B45C;
+      --gold-soft: #322A15;
+      --meter-track: #243029;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25);
+    }
+  }
+  :root[data-theme="light"] {
+    --paper: #F7FAF7; --surface: #FFFFFF; --ink: #1C2620; --ink-2: #47564D;
+    --ink-3: #6E7F74; --line: #DCE5DD; --line-soft: #E8EFE9; --accent: #1E6B47;
+    --accent-strong: #155436; --accent-soft: #E3F0E8; --gold: #9A7318;
+    --gold-soft: #F6EED8; --meter-track: #E4ECE5;
+    --shadow: 0 1px 2px rgba(28,38,32,.06), 0 4px 14px rgba(28,38,32,.05);
+  }
+  :root[data-theme="dark"] {
+    --paper: #111814; --surface: #18211B; --ink: #E8EFE9; --ink-2: #A9BAAE;
+    --ink-3: #7E9084; --line: #2A362E; --line-soft: #222D26; --accent: #52B586;
+    --accent-strong: #6FCA9C; --accent-soft: #1D3327; --gold: #D9B45C;
+    --gold-soft: #322A15; --meter-track: #243029;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25);
+  }
+
+  * { box-sizing: border-box; }
+  html { background: var(--paper); }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 28px 20px 72px; }
+
+  /* ---------- demo banner ---------- */
+  #demoBanner {
+    display: none;
+    background: var(--gold-soft);
+    color: var(--gold);
+    border: 1px dashed var(--gold);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 22px;
+  }
+  body.demo #demoBanner { display: block; }
+
+  /* ---------- header ---------- */
+  header { margin-bottom: 34px; }
+  .topline {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap; margin-bottom: 26px;
+  }
+  .eyebrow {
+    font-size: 12px; font-weight: 700; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .controls { display: flex; gap: 8px; }
+  .ctl {
+    font: inherit; font-size: 12.5px; font-weight: 600;
+    color: var(--ink-2); background: var(--surface);
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 5px 13px; cursor: pointer;
+  }
+  .ctl:hover { border-color: var(--accent); color: var(--accent); }
+  .ctl:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(30px, 5.4vw, 44px);
+    font-weight: 700; line-height: 1.12;
+    margin: 0 0 12px; text-wrap: balance;
+  }
+  .lede { max-width: 62ch; color: var(--ink-2); font-size: 16.5px; margin: 0; }
+
+  /* ---------- goal meter ---------- */
+  .goal {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 26px 26px 22px;
+    margin-bottom: 16px;
+  }
+  .goal-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .raised {
+    font-family: Georgia, serif;
+    font-size: clamp(34px, 6vw, 50px);
+    font-weight: 700; line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+  }
+  .of-goal { color: var(--ink-2); font-size: 15.5px; }
+  .of-goal strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+  .pct { color: var(--ink-3); font-size: 14px; font-variant-numeric: tabular-nums; }
+  .meter {
+    position: relative; height: 12px; border-radius: 6px;
+    background: var(--meter-track); margin: 18px 0 10px; overflow: hidden;
+  }
+  .meter-fill {
+    position: absolute; inset: 0 auto 0 0; width: 0%;
+    background: var(--accent); border-radius: 6px;
+    transition: width .8s cubic-bezier(.2,.8,.2,1);
+  }
+  .meter-ticks { position: absolute; inset: 0; }
+  .meter-ticks span {
+    position: absolute; top: 0; bottom: 0; width: 2px;
+    background: var(--paper); opacity: .9;
+  }
+  .meter-labels {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--ink-3); font-variant-numeric: tabular-nums;
+  }
+  @media (prefers-reduced-motion: reduce) { .meter-fill { transition: none; } }
+
+  /* ---------- stat tiles ---------- */
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 44px; }
+  @media (max-width: 560px) { .tiles { grid-template-columns: 1fr; } }
+  .tile {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; padding: 14px 18px;
+  }
+  .tile .k {
+    font-size: 11.5px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--ink-3);
+  }
+  .tile .v {
+    font-family: Georgia, serif; font-size: 26px; font-weight: 700;
+    font-variant-numeric: tabular-nums; margin-top: 2px;
+  }
+
+  /* ---------- sections ---------- */
+  section { margin-bottom: 46px; }
+  h2 {
+    font-family: Georgia, serif; font-size: 24px; font-weight: 700;
+    margin: 0 0 6px; text-wrap: balance;
+  }
+  .sec-note { color: var(--ink-2); font-size: 14.5px; margin: 0 0 18px; max-width: 68ch; }
+
+  /* ---------- sponsor wall ---------- */
+  .wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .sponsor {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; padding: 16px 18px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .sponsor.on-board { border-color: var(--gold); }
+  .sponsor .name { font-weight: 700; font-size: 16px; }
+  .sponsor .name.code { color: var(--ink-2); font-weight: 600; letter-spacing: .04em; }
+  .sponsor .amt { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    align-self: flex-start;
+    font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--gold); background: var(--gold-soft);
+    border-radius: 999px; padding: 3px 10px;
+  }
+  .chip-anon {
+    display: inline-flex; align-self: flex-start;
+    font-size: 11.5px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+    color: var(--ink-3); background: var(--line-soft);
+    border-radius: 999px; padding: 3px 10px;
+  }
+  .empty {
+    border: 1.5px dashed var(--line); border-radius: 12px;
+    padding: 30px 22px; text-align: center; color: var(--ink-3); font-size: 15px;
+    grid-column: 1 / -1;
+  }
+
+  /* ---------- ledger tables ---------- */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 540px; }
+  th {
+    text-align: left; font-size: 11.5px; font-weight: 700;
+    letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3);
+    padding: 12px 16px; border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: 1px solid var(--line); }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.folio { color: var(--ink-3); font-size: 13px; white-space: nowrap; }
+  td.fecha { color: var(--ink-2); white-space: nowrap; }
+  .star { color: var(--gold); }
+  tfoot td {
+    font-weight: 700; border-bottom: none;
+    background: var(--accent-soft); color: var(--ink);
+  }
+  tfoot td:first-child { border-radius: 0 0 0 11px; }
+  tfoot td:last-child { border-radius: 0 0 11px 0; }
+  .match-note {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 10px; font-size: 13.5px; color: var(--accent);
+  }
+  .match-note .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent); flex: none;
+  }
+  td.empty-cell { text-align: center; color: var(--ink-3); padding: 26px 16px; }
+
+  /* ---------- how it works ---------- */
+  .how { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (max-width: 620px) { .how { grid-template-columns: 1fr; } }
+  .how-card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; padding: 18px 20px;
+  }
+  .how-card h3 { margin: 0 0 6px; font-size: 15.5px; }
+  .how-card p { margin: 0; color: var(--ink-2); font-size: 14px; }
+
+  footer {
+    border-top: 1px solid var(--line); padding-top: 22px;
+    color: var(--ink-3); font-size: 13.5px; max-width: 68ch;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div id="demoBanner" data-i18n="demoBanner"></div>
+
+  <header>
+    <div class="topline">
+      <span class="eyebrow" data-i18n="eyebrow"></span>
+      <span class="controls">
+        <button class="ctl" id="langBtn" type="button">English</button>
+        <button class="ctl" id="demoBtn" type="button" data-i18n="demoOn"></button>
+      </span>
+    </div>
+    <h1 data-i18n="title"></h1>
+    <p class="lede" data-i18n="lede"></p>
+  </header>
+
+  <div class="goal">
+    <div class="goal-top">
+      <div>
+        <div class="raised" id="raised">$0</div>
+        <div class="of-goal"><span data-i18n="ofGoal"></span> <strong id="goalAmt"></strong> MXN</div>
+      </div>
+      <div class="pct" id="pct"></div>
+    </div>
+    <div class="meter" role="img" id="meterEl" aria-label="">
+      <div class="meter-fill" id="meterFill"></div>
+      <div class="meter-ticks" id="meterTicks"></div>
+    </div>
+    <div class="meter-labels"><span>$0</span><span id="goalLabel"></span></div>
+  </div>
+
+  <div class="tiles">
+    <div class="tile"><div class="k" data-i18n="tSponsors"></div><div class="v" id="tSponsorsV">0</div></div>
+    <div class="tile"><div class="k" data-i18n="tBoard"></div><div class="v" id="tBoardV">0</div></div>
+    <div class="tile"><div class="k" data-i18n="tLeft"></div><div class="v" id="tLeftV">$0</div></div>
+  </div>
+
+  <section>
+    <h2 data-i18n="wallH"></h2>
+    <p class="sec-note" data-i18n="wallNote"></p>
+    <div class="wall" id="wall"></div>
+  </section>
+
+  <section>
+    <h2 data-i18n="ledgerH"></h2>
+    <p class="sec-note" data-i18n="ledgerNote"></p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr>
+          <th data-i18n="colFolio"></th>
+          <th data-i18n="colDate"></th>
+          <th data-i18n="colSponsor"></th>
+          <th class="num" data-i18n="colAmount"></th>
+          <th class="num" data-i18n="colRunning"></th>
+        </tr></thead>
+        <tbody id="ledgerBody"></tbody>
+        <tfoot><tr>
+          <td colspan="3" data-i18n="totalRow"></td>
+          <td class="num" id="ledgerTotal">$0</td>
+          <td></td>
+        </tr></tfoot>
+      </table>
+    </div>
+    <div class="match-note"><span class="dot"></span><span data-i18n="matchNote"></span></div>
+  </section>
+
+  <section>
+    <h2 data-i18n="spendH"></h2>
+    <p class="sec-note" data-i18n="spendNote"></p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr>
+          <th data-i18n="colDate"></th>
+          <th data-i18n="colConcept"></th>
+          <th class="num" data-i18n="colAmount"></th>
+        </tr></thead>
+        <tbody id="spendBody"></tbody>
+        <tfoot><tr>
+          <td colspan="2" data-i18n="availRow"></td>
+          <td class="num" id="availTotal">$0</td>
+        </tr></tfoot>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-i18n="howH"></h2>
+    <div class="how">
+      <div class="how-card"><h3 data-i18n="how1H"></h3><p data-i18n="how1P"></p></div>
+      <div class="how-card"><h3 data-i18n="how2H"></h3><p data-i18n="how2P"></p></div>
+      <div class="how-card"><h3 data-i18n="how3H"></h3><p data-i18n="how3P"></p></div>
+      <div class="how-card"><h3 data-i18n="how4H"></h3><p data-i18n="how4P"></p></div>
+    </div>
+  </section>
+
+  <footer data-i18n="footer"></footer>
+</div>
+
+<script>
+/* ================================================================
+   DATOS — edita solo esta parte / EDIT ONLY THIS PART
+   Cada patrocinio: folio (recibo), fecha, nombre O código, monto.
+   Si el patrocinador quiere anonimato: publico:false y un código
+   (él recibe el código en su recibo para verificar su renglón).
+   ================================================================ */
+const CONFIG = {
+  meta: 30000,          // goal in MXN
+  umbralTablon: 1000    // >= this amount -> name on the camp board
+};
+
+const PATROCINADORES = [
+  // { folio: "F-001", fecha: "2026-07-10", nombre: "Ferretería López", publico: true,  monto: 2500 },
+  // anónimo: { folio: "F-002", fecha: "2026-07-11", nombre: "ÁGUILA-07", publico: false, monto: 1500 },
+];
+
+const GASTOS = [
+  // { fecha: "2026-08-01", concepto: "Premios — ronda final", monto: 4000 },
+];
+
+/* ---- sample data shown only in demo mode (clearly labeled) ---- */
+const DEMO_PATROCINADORES = [
+  { folio: "F-001", fecha: "2026-07-10", nombre: "Ferretería El Martillo", publico: true,  monto: 5000 },
+  { folio: "F-002", fecha: "2026-07-11", nombre: "Taquería Doña Lupe",     publico: true,  monto: 2500 },
+  { folio: "F-003", fecha: "2026-07-12", nombre: "ÁGUILA-07",              publico: false, monto: 1500 },
+  { folio: "F-004", fecha: "2026-07-14", nombre: "Panadería La Espiga",    publico: true,  monto: 3000 },
+  { folio: "F-005", fecha: "2026-07-15", nombre: "NOPAL-03",               publico: false, monto: 500  },
+  { folio: "F-006", fecha: "2026-07-16", nombre: "Abarrotes San José",     publico: true,  monto: 1000 },
+];
+const DEMO_GASTOS = [
+  { fecha: "2026-07-20", concepto: "Anticipo — premios finales", monto: 3500 },
+];
+
+/* ================================================================ */
+
+const STR = {
+  es: {
+    eyebrow: "Transparencia de patrocinios",
+    title: "Padrinos del Campamento Juvenil",
+    lede: "Estamos reuniendo $30,000 MXN para el torneo del campamento. Esta página es el registro público: cada peso que entra y cada peso que sale queda anotado aquí, a la vista de todos los patrocinadores.",
+    demoBanner: "Demostración — datos de muestra, no son donativos reales",
+    demoOn: "Ver demostración",
+    demoOff: "Volver a datos reales",
+    ofGoal: "de la meta de",
+    pctOf: "de la meta",
+    tSponsors: "Patrocinadores",
+    tBoard: "En el tablón",
+    tLeft: "Falta por reunir",
+    wallH: "Muro de patrocinadores",
+    wallNote: "Los patrocinios de $1,000 MXN o más llevan el nombre del negocio al tablón físico del campamento, donde todos los asistentes verán quién hizo esto posible. Quien prefiera anonimato aparece con su código privado.",
+    wallEmpty: "El muro está esperando su primer nombre. Sé el primero en hacer esto posible.",
+    onBoard: "★ Tablón del campamento",
+    anon: "Anónimo",
+    ledgerH: "Registro de donativos",
+    ledgerNote: "Cada donativo recibe un folio y un recibo. La columna «Acumulado» va sumando renglón por renglón: cualquiera puede verificar que el total coincide con el contador de arriba.",
+    ledgerEmpty: "Aún no hay donativos registrados.",
+    colFolio: "Folio", colDate: "Fecha", colSponsor: "Patrocinador",
+    colAmount: "Monto", colRunning: "Acumulado", colConcept: "Concepto",
+    totalRow: "Total recaudado",
+    matchNote: "Este total coincide, peso por peso, con el contador de arriba.",
+    spendH: "Uso de los fondos",
+    spendNote: "La transparencia va en ambos sentidos: cada gasto del torneo se publicará aquí con su fecha y concepto, para que los patrocinadores vean exactamente en qué se usó su apoyo.",
+    spendEmpty: "Todavía no hay gastos. Cada gasto se publicará aquí en cuanto ocurra.",
+    availRow: "Disponible (recaudado − gastado)",
+    howH: "Cómo garantizamos la transparencia",
+    how1H: "Cada peso queda registrado",
+    how1P: "Todo donativo entra a esta página con folio, fecha y monto el mismo día que se recibe, y el patrocinador se lleva un recibo con ese folio.",
+    how2H: "¿Prefieres no aparecer?",
+    how2P: "Te asignamos un código privado (por ejemplo, ÁGUILA-07). Solo tú lo conoces: buscas tu código en el registro y confirmas que tu donativo está anotado con el monto correcto.",
+    how3H: "$1,000 o más: tu nombre en el campamento",
+    how3P: "Los negocios que aporten $1,000 MXN o más aparecen en el tablón físico del campamento frente a todos los jóvenes y sus familias, además de en esta página.",
+    how4H: "Los gastos también se publican",
+    how4P: "No solo mostramos lo que entra: cada compra para el torneo se anota en la sección de gastos, de modo que el dinero se puede seguir de principio a fin.",
+    footer: "¿Te interesa patrocinar o tienes preguntas sobre algún registro? Habla directamente con el organizador del campamento. Esta página se actualiza con cada donativo recibido.",
+    meterLabel: (r, g) => `Recaudado ${r} de ${g}`,
+    locale: "es-MX"
+  },
+  en: {
+    eyebrow: "Sponsorship transparency",
+    title: "Youth Camp Sponsor Board",
+    lede: "We are raising $30,000 MXN for the camp tournament. This page is the public record: every peso that comes in and every peso that goes out is logged here, in full view of every sponsor.",
+    demoBanner: "Demo — sample data, not real donations",
+    demoOn: "View demo",
+    demoOff: "Back to real data",
+    ofGoal: "of the",
+    pctOf: "of goal",
+    tSponsors: "Sponsors",
+    tBoard: "On the board",
+    tLeft: "Still needed",
+    wallH: "Sponsor wall",
+    wallNote: "Sponsorships of $1,000 MXN or more put the business name on the physical board at camp, where every attendee will see who made this possible. Sponsors who prefer anonymity appear under their private code.",
+    wallEmpty: "The wall is waiting for its first name. Be the first to make this happen.",
+    onBoard: "★ Camp board",
+    anon: "Anonymous",
+    ledgerH: "Donation ledger",
+    ledgerNote: "Every donation gets a receipt number (folio). The running-total column adds up row by row, so anyone can verify the total matches the counter above.",
+    ledgerEmpty: "No donations recorded yet.",
+    colFolio: "Receipt", colDate: "Date", colSponsor: "Sponsor",
+    colAmount: "Amount", colRunning: "Running total", colConcept: "Item",
+    totalRow: "Total raised",
+    matchNote: "This total matches the counter at the top, peso for peso.",
+    spendH: "How the funds are used",
+    spendNote: "Transparency goes both ways: every tournament expense will be published here with its date and description, so sponsors see exactly where their support went.",
+    spendEmpty: "No expenses yet. Every expense will be posted here as it happens.",
+    availRow: "Available (raised − spent)",
+    howH: "How we guarantee transparency",
+    how1H: "Every peso is on the record",
+    how1P: "Each donation is posted to this page with a receipt number, date, and amount the same day it is received, and the sponsor keeps a receipt with that number.",
+    how2H: "Prefer not to be named?",
+    how2P: "You get a private code (for example, ÁGUILA-07). Only you know it: look up your code in the ledger and confirm your donation is recorded with the right amount.",
+    how3H: "$1,000+: your name at the camp",
+    how3P: "Businesses giving $1,000 MXN or more appear on the physical board at camp, in front of all the youth and their families — as well as on this page.",
+    how4H: "Spending is published too",
+    how4P: "We don't just show what comes in: every tournament purchase is logged in the expenses section, so the money can be followed from start to finish.",
+    footer: "Interested in sponsoring, or have a question about an entry? Talk directly to the camp organizer. This page is updated with every donation received.",
+    meterLabel: (r, g) => `Raised ${r} of ${g}`,
+    locale: "en-US"
+  }
+};
+
+let lang = "es";
+let demo = false;
+
+const fmt = v => new Intl.NumberFormat(STR[lang].locale,
+  { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(v);
+
+const fmtDate = iso => {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString(STR[lang].locale,
+    { day: "numeric", month: "short", year: "numeric" });
+};
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function render() {
+  const t = STR[lang];
+  document.documentElement.lang = lang;
+  document.title = lang === "es"
+    ? "Padrinos del Campamento — Transparencia"
+    : "Youth Camp Sponsor Board — Transparency";
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (t[key]) el.textContent = t[key];
+  });
+  document.getElementById("langBtn").textContent = lang === "es" ? "English" : "Español";
+  document.getElementById("demoBtn").textContent = demo ? t.demoOff : t.demoOn;
+  document.body.classList.toggle("demo", demo);
+
+  const sponsors = (demo ? DEMO_PATROCINADORES : PATROCINADORES)
+    .slice().sort((a, b) => a.folio.localeCompare(b.folio));
+  const gastos = demo ? DEMO_GASTOS : GASTOS;
+
+  const raised = sponsors.reduce((s, p) => s + p.monto, 0);
+  const spent = gastos.reduce((s, g) => s + g.monto, 0);
+  const goal = CONFIG.meta;
+  const pct = Math.min(100, raised / goal * 100);
+
+  /* goal meter */
+  document.getElementById("raised").textContent = fmt(raised);
+  document.getElementById("goalAmt").textContent = fmt(goal);
+  document.getElementById("goalLabel").textContent = fmt(goal);
+  document.getElementById("pct").textContent = pct.toFixed(0) + "% " + t.pctOf;
+  document.getElementById("meterFill").style.width = pct + "%";
+  document.getElementById("meterEl").setAttribute("aria-label", t.meterLabel(fmt(raised), fmt(goal)));
+  const ticks = document.getElementById("meterTicks");
+  ticks.innerHTML = "";
+  for (let v = 5000; v < goal; v += 5000) {
+    const s = document.createElement("span");
+    s.style.left = (v / goal * 100) + "%";
+    ticks.appendChild(s);
+  }
+
+  /* stat tiles */
+  document.getElementById("tSponsorsV").textContent = sponsors.length;
+  document.getElementById("tBoardV").textContent =
+    sponsors.filter(p => p.publico && p.monto >= CONFIG.umbralTablon).length;
+  document.getElementById("tLeftV").textContent = fmt(Math.max(0, goal - raised));
+
+  /* sponsor wall — biggest first */
+  const wall = document.getElementById("wall");
+  if (!sponsors.length) {
+    wall.innerHTML = `<div class="empty">${esc(t.wallEmpty)}</div>`;
+  } else {
+    wall.innerHTML = sponsors.slice().sort((a, b) => b.monto - a.monto).map(p => {
+      const onBoard = p.publico && p.monto >= CONFIG.umbralTablon;
+      const nameCls = p.publico ? "name" : "name code";
+      const tag = onBoard
+        ? `<span class="badge">${esc(t.onBoard)}</span>`
+        : (!p.publico ? `<span class="chip-anon">${esc(t.anon)}</span>` : "");
+      return `<div class="sponsor${onBoard ? " on-board" : ""}">
+        <span class="${nameCls}">${esc(p.nombre)}</span>
+        <span class="amt">${fmt(p.monto)}</span>${tag}
+      </div>`;
+    }).join("");
+  }
+
+  /* donation ledger — chronological with running total */
+  const body = document.getElementById("ledgerBody");
+  if (!sponsors.length) {
+    body.innerHTML = `<tr><td colspan="5" class="empty-cell">${esc(t.ledgerEmpty)}</td></tr>`;
+  } else {
+    let run = 0;
+    body.innerHTML = sponsors.map(p => {
+      run += p.monto;
+      const star = p.publico && p.monto >= CONFIG.umbralTablon ? ` <span class="star">★</span>` : "";
+      return `<tr>
+        <td class="folio">${esc(p.folio)}</td>
+        <td class="fecha">${esc(fmtDate(p.fecha))}</td>
+        <td>${esc(p.nombre)}${star}</td>
+        <td class="num">${fmt(p.monto)}</td>
+        <td class="num">${fmt(run)}</td>
+      </tr>`;
+    }).join("");
+  }
+  document.getElementById("ledgerTotal").textContent = fmt(raised);
+
+  /* expenses */
+  const sBody = document.getElementById("spendBody");
+  if (!gastos.length) {
+    sBody.innerHTML = `<tr><td colspan="3" class="empty-cell">${esc(t.spendEmpty)}</td></tr>`;
+  } else {
+    sBody.innerHTML = gastos.map(g => `<tr>
+      <td class="fecha">${esc(fmtDate(g.fecha))}</td>
+      <td>${esc(g.concepto)}</td>
+      <td class="num">${fmt(g.monto)}</td>
+    </tr>`).join("");
+  }
+  document.getElementById("availTotal").textContent = fmt(raised - spent);
+}
+
+document.getElementById("langBtn").addEventListener("click", () => {
+  lang = lang === "es" ? "en" : "es";
+  render();
+});
+document.getElementById("demoBtn").addEventListener("click", () => {
+  demo = !demo;
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
