@@ -174,6 +174,27 @@
   }
   .sec-note { color: var(--ink-2); font-size: 14.5px; margin: 0 0 18px; max-width: 68ch; }
 
+  /* ---------- mission ---------- */
+  .mission {
+    background: var(--accent-soft); border: 1px solid var(--line);
+    border-radius: 14px; padding: 26px; margin-bottom: 44px;
+  }
+  .mission .eyebrow { margin-bottom: 8px; }
+  .mission h2 { margin-bottom: 10px; }
+  .mission-copy { margin: 0; color: var(--ink-2); max-width: 70ch; font-size: 16px; }
+  .mission-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
+  .mission-card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 17px 18px;
+  }
+  .mission-card .k {
+    color: var(--accent); font-size: 11.5px; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase;
+  }
+  .mission-card h3 { font-size: 17px; margin: 5px 0 6px; }
+  .mission-card p { color: var(--ink-2); font-size: 14.5px; margin: 0; }
+  @media (max-width: 560px) { .mission { padding: 21px; } .mission-grid { grid-template-columns: 1fr; } }
+
   /* ---------- sponsor wall ---------- */
   .wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
   .sponsor {
@@ -306,6 +327,24 @@
     <div class="tile"><div class="k" data-i18n="tLeft"></div><div class="v" id="tLeftV">$0</div></div>
   </div>
 
+  <section class="mission">
+    <p class="eyebrow" data-i18n="missionEyebrow"></p>
+    <h2 data-i18n="missionH"></h2>
+    <p class="mission-copy" data-i18n="missionP"></p>
+    <div class="mission-grid">
+      <article class="mission-card">
+        <div class="k" data-i18n="missionPrizeK"></div>
+        <h3 data-i18n="missionPrizeH"></h3>
+        <p data-i18n="missionPrizeP"></p>
+      </article>
+      <article class="mission-card">
+        <div class="k" data-i18n="missionWhyK"></div>
+        <h3 data-i18n="missionWhyH"></h3>
+        <p data-i18n="missionWhyP"></p>
+      </article>
+    </div>
+  </section>
+
   <section>
     <h2 data-i18n="wallH"></h2>
     <p class="sec-note" data-i18n="wallNote"></p>
@@ -416,6 +455,15 @@ const STR = {
     tSponsors: "Patrocinadores",
     tBoard: "En el tablón",
     tLeft: "Falta por reunir",
+    missionEyebrow: "Nuestra misión",
+    missionH: "Un torneo que abre la puerta a algo más grande",
+    missionP: "Estamos organizando un torneo en el Campamento Huápoca para reunir a jóvenes, crear recuerdos y darles una razón emocionante para asistir. El premio de primer lugar será un iPhone nuevo; pero la meta verdadera es que, año tras año, más jóvenes lleguen a un lugar donde puedan convivir, conocer a Jesús y encontrar esperanza.",
+    missionPrizeK: "El torneo",
+    missionPrizeH: "Un iPhone nuevo para el primer lugar",
+    missionPrizeP: "Un premio emocionante que anima a los jóvenes a participar, dar lo mejor de sí y volver cada año.",
+    missionWhyK: "El propósito",
+    missionWhyH: "Un lugar que transforma vidas",
+    missionWhyP: "El Campamento Huápoca es un espacio de amistad, testimonios y decisiones que cambian vidas. Queremos que más jóvenes tengan la oportunidad de vivirlo.",
     wallH: "Muro de patrocinadores",
     wallNote: "Los patrocinios de $1,000 MXN o más llevan el nombre del negocio al tablón físico del campamento, donde todos los asistentes verán quién hizo esto posible. Quien prefiera anonimato aparece con su código privado.",
     wallEmpty: "El muro está esperando su primer nombre. Sé el primero en hacer esto posible.",
@@ -457,6 +505,15 @@ const STR = {
     tSponsors: "Sponsors",
     tBoard: "On the board",
     tLeft: "Still needed",
+    missionEyebrow: "Our mission",
+    missionH: "A tournament that opens the door to something bigger",
+    missionP: "We are organizing a tournament at Huápoca Camp to bring young people together, create memories, and give them an exciting reason to attend. First place will receive a new iPhone; but the deeper goal is that, year after year, more youth come to a place where they can build friendships, meet Jesus, and find hope.",
+    missionPrizeK: "The tournament",
+    missionPrizeH: "A new iPhone for first place",
+    missionPrizeP: "An exciting prize that encourages young people to participate, give their best, and return each year.",
+    missionWhyK: "The purpose",
+    missionWhyH: "A place that changes lives",
+    missionWhyP: "Huápoca Camp is a place of friendship, testimonies, and life-changing decisions. We want more young people to have the opportunity to experience it.",
     wallH: "Sponsor wall",
     wallNote: "Sponsorships of $1,000 MXN or more put the business name on the physical board at camp, where every attendee will see who made this possible. Sponsors who prefer anonymity appear under their private code.",
     wallEmpty: "The wall is waiting for its first name. Be the first to make this happen.",
