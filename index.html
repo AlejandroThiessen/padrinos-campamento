@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>Padrinos del Campamento — Transparencia</title>
+<title>Enfluss Youth Camp · 20–23 August — Patrocinios</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root {
@@ -107,6 +107,14 @@
     font-size: clamp(30px, 5.4vw, 44px);
     font-weight: 700; line-height: 1.12;
     margin: 0 0 12px; text-wrap: balance;
+  }
+  .event-date {
+    display: inline-flex; align-items: center;
+    color: var(--accent); background: var(--accent-soft);
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 5px 13px; margin: 0 0 14px;
+    font-size: 13px; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase;
   }
   .lede { max-width: 62ch; color: var(--ink-2); font-size: 16.5px; margin: 0; }
 
@@ -303,6 +311,7 @@
       </span>
     </div>
     <h1 data-i18n="title"></h1>
+    <p class="event-date" data-i18n="eventDates"></p>
     <p class="lede" data-i18n="lede"></p>
   </header>
 
@@ -445,7 +454,8 @@ const DEMO_GASTOS = [
 const STR = {
   es: {
     eyebrow: "Transparencia de patrocinios",
-    title: "Padrinos del Campamento Juvenil",
+    title: "Enfluss Youth Camp",
+    eventDates: "20–23 de agosto",
     lede: "Estamos reuniendo $30,000 MXN para el torneo del campamento. Esta página es el registro público: cada peso que entra y cada peso que sale queda anotado aquí, a la vista de todos los patrocinadores.",
     demoBanner: "Demostración — datos de muestra, no son donativos reales",
     demoOn: "Ver demostración",
@@ -495,7 +505,8 @@ const STR = {
   },
   en: {
     eyebrow: "Sponsorship transparency",
-    title: "Youth Camp Sponsor Board",
+    title: "Enfluss Youth Camp",
+    eventDates: "20–23 August",
     lede: "We are raising $30,000 MXN for the camp tournament. This page is the public record: every peso that comes in and every peso that goes out is logged here, in full view of every sponsor.",
     demoBanner: "Demo — sample data, not real donations",
     demoOn: "View demo",
