@@ -118,6 +118,44 @@
   }
   .lede { max-width: 62ch; color: var(--ink-2); font-size: 16.5px; margin: 0; }
 
+  /* ---------- camp photography ---------- */
+  .hero-collage {
+    display: grid; grid-template-columns: 1.7fr .8fr;
+    grid-template-rows: repeat(2, 178px); gap: 10px;
+    margin-top: 26px;
+  }
+  .hero-shot {
+    position: relative; margin: 0; overflow: hidden;
+    border-radius: 14px; background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+  .hero-shot.main { grid-row: 1 / 3; }
+  .hero-shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .hero-shot.main img { object-position: center 48%; }
+  .hero-shot.community img { object-position: center 63%; }
+  .hero-shot.evening img { object-position: center 47%; }
+  .hero-label {
+    position: absolute; left: 16px; bottom: 16px;
+    max-width: calc(100% - 32px); padding: 8px 12px;
+    border-radius: 999px; color: #fff;
+    background: rgba(17,24,20,.72); backdrop-filter: blur(8px);
+    font-size: 12px; font-weight: 700; letter-spacing: .04em;
+  }
+  .moments-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .moment-card {
+    margin: 0; overflow: hidden; border-radius: 14px;
+    background: var(--surface); border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+  .moment-card img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+  .moment-card figcaption { padding: 12px 15px 14px; color: var(--ink-2); font-size: 13.5px; }
+  @media (max-width: 620px) {
+    .hero-collage { grid-template-columns: 1fr 1fr; grid-template-rows: 235px 160px; }
+    .hero-shot.main { grid-column: 1 / 3; grid-row: 1; }
+    .hero-shot.community, .hero-shot.evening { grid-row: 2; }
+    .moments-grid { grid-template-columns: 1fr; }
+  }
+
   /* ---------- goal meter ---------- */
   .goal {
     background: var(--surface);
@@ -313,6 +351,18 @@
     <h1 data-i18n="title"></h1>
     <p class="event-date" data-i18n="eventDates"></p>
     <p class="lede" data-i18n="lede"></p>
+    <div class="hero-collage" aria-label="Enfluss Youth Camp">
+      <figure class="hero-shot main">
+        <img src="assets/camp/tournament.webp" alt="Jóvenes participando en el torneo del campamento" width="1280" height="853">
+        <figcaption class="hero-label" data-i18n="heroCaption"></figcaption>
+      </figure>
+      <figure class="hero-shot community">
+        <img src="assets/camp/community-circle.webp" alt="Jóvenes participando juntos en una actividad" width="853" height="1280">
+      </figure>
+      <figure class="hero-shot evening">
+        <img src="assets/camp/evening-message.webp" alt="Mensaje nocturno en el campamento" width="853" height="1280">
+      </figure>
+    </div>
   </header>
 
   <div class="goal">
@@ -351,6 +401,21 @@
         <h3 data-i18n="missionWhyH"></h3>
         <p data-i18n="missionWhyP"></p>
       </article>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-i18n="momentsH"></h2>
+    <p class="sec-note" data-i18n="momentsNote"></p>
+    <div class="moments-grid">
+      <figure class="moment-card">
+        <img src="assets/camp/worship.webp" alt="Jóvenes cantando y adorando juntos" width="1280" height="853" loading="lazy">
+        <figcaption data-i18n="momentFaith"></figcaption>
+      </figure>
+      <figure class="moment-card">
+        <img src="assets/camp/volleyball.webp" alt="Balón de voleibol en el campo del campamento" width="1280" height="853" loading="lazy">
+        <figcaption data-i18n="momentPlay"></figcaption>
+      </figure>
     </div>
   </section>
 
@@ -457,6 +522,7 @@ const STR = {
     title: "Enfluss Youth Camp",
     eventDates: "20–23 de agosto",
     lede: "Estamos reuniendo $30,000 MXN para el torneo del campamento. Esta página es el registro público: cada peso que entra y cada peso que sale queda anotado aquí, a la vista de todos los patrocinadores.",
+    heroCaption: "Convivencia, propósito y recuerdos que permanecen",
     demoBanner: "Demostración — datos de muestra, no son donativos reales",
     demoOn: "Ver demostración",
     demoOff: "Volver a datos reales",
@@ -474,6 +540,10 @@ const STR = {
     missionWhyK: "El propósito",
     missionWhyH: "Un lugar que transforma vidas",
     missionWhyP: "El Campamento Huápoca es un espacio de amistad, testimonios y decisiones que cambian vidas. Queremos que más jóvenes tengan la oportunidad de vivirlo.",
+    momentsH: "Así se vive Huápoca",
+    momentsNote: "El torneo es parte de una experiencia más grande: juego, comunidad, adoración y mensajes que invitan a cada joven a acercarse a Jesús.",
+    momentFaith: "Un espacio para adorar, escuchar y recordar por qué hacemos esto.",
+    momentPlay: "Competencia sana, amistades nuevas y momentos que hacen que los jóvenes quieran volver.",
     wallH: "Muro de patrocinadores",
     wallNote: "Los patrocinios de $1,000 MXN o más llevan el nombre del negocio al tablón físico del campamento, donde todos los asistentes verán quién hizo esto posible. Quien prefiera anonimato aparece con su código privado.",
     wallEmpty: "El muro está esperando su primer nombre. Sé el primero en hacer esto posible.",
@@ -508,6 +578,7 @@ const STR = {
     title: "Enfluss Youth Camp",
     eventDates: "20–23 August",
     lede: "We are raising $30,000 MXN for the camp tournament. This page is the public record: every peso that comes in and every peso that goes out is logged here, in full view of every sponsor.",
+    heroCaption: "Community, purpose, and memories that last",
     demoBanner: "Demo — sample data, not real donations",
     demoOn: "View demo",
     demoOff: "Back to real data",
@@ -525,6 +596,10 @@ const STR = {
     missionWhyK: "The purpose",
     missionWhyH: "A place that changes lives",
     missionWhyP: "Huápoca Camp is a place of friendship, testimonies, and life-changing decisions. We want more young people to have the opportunity to experience it.",
+    momentsH: "Life at Huápoca",
+    momentsNote: "The tournament is part of something bigger: play, community, worship, and messages that invite every young person to draw closer to Jesus.",
+    momentFaith: "A space to worship, listen, and remember why we do this.",
+    momentPlay: "Healthy competition, new friendships, and moments that make young people want to return.",
     wallH: "Sponsor wall",
     wallNote: "Sponsorships of $1,000 MXN or more put the business name on the physical board at camp, where every attendee will see who made this possible. Sponsors who prefer anonymity appear under their private code.",
     wallEmpty: "The wall is waiting for its first name. Be the first to make this happen.",
