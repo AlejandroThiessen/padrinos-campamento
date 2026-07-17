@@ -241,6 +241,25 @@
   .mission-card p { color: var(--ink-2); font-size: 14.5px; margin: 0; }
   @media (max-width: 560px) { .mission { padding: 21px; } .mission-grid { grid-template-columns: 1fr; } }
 
+  /* ---------- planned prize budget ---------- */
+  .budget-plan {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px 22px; margin-bottom: 18px;
+    box-shadow: var(--shadow);
+  }
+  .budget-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 18px; }
+  .budget-head .k { color: var(--accent); font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .budget-head h3 { margin: 4px 0 0; font-family: Georgia, serif; font-size: 20px; }
+  .budget-total { color: var(--accent); font-family: Georgia, serif; font-size: 24px; font-weight: 700; white-space: nowrap; }
+  .budget-item + .budget-item { margin-top: 15px; }
+  .budget-row { display: flex; justify-content: space-between; gap: 16px; font-size: 14.5px; }
+  .budget-row strong { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .budget-track { height: 8px; margin-top: 7px; overflow: hidden; border-radius: 999px; background: var(--meter-track); }
+  .budget-fill { height: 100%; border-radius: inherit; background: var(--accent); }
+  .budget-fill.other { background: var(--gold); }
+  .budget-note { margin: 15px 0 0; color: var(--ink-3); font-size: 12.5px; }
+  @media (max-width: 480px) { .budget-head { align-items: flex-start; flex-direction: column; gap: 8px; } }
+
   /* ---------- sponsor wall ---------- */
   .wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
   .sponsor {
@@ -451,6 +470,24 @@
   <section>
     <h2 data-i18n="spendH"></h2>
     <p class="sec-note" data-i18n="spendNote"></p>
+    <div class="budget-plan">
+      <div class="budget-head">
+        <div>
+          <div class="k" data-i18n="budgetK"></div>
+          <h3 data-i18n="budgetH"></h3>
+        </div>
+        <div class="budget-total">$30,000</div>
+      </div>
+      <div class="budget-item">
+        <div class="budget-row"><span data-i18n="budgetIphone"></span><strong>$28,499</strong></div>
+        <div class="budget-track"><div class="budget-fill" style="width:95%"></div></div>
+      </div>
+      <div class="budget-item">
+        <div class="budget-row"><span data-i18n="budgetOther"></span><strong>$1,501</strong></div>
+        <div class="budget-track"><div class="budget-fill other" style="width:5%"></div></div>
+      </div>
+      <p class="budget-note" data-i18n="budgetNote"></p>
+    </div>
     <div class="table-scroll">
       <table>
         <thead><tr>
@@ -561,6 +598,11 @@ const STR = {
     matchNote: "Este total coincide, peso por peso, con el contador de arriba.",
     spendH: "Uso de los fondos",
     spendNote: "La transparencia va en ambos sentidos: cada gasto del torneo se publicará aquí con su fecha y concepto, para que los patrocinadores vean exactamente en qué se usó su apoyo.",
+    budgetK: "Plan para la meta",
+    budgetH: "Presupuesto de premios",
+    budgetIphone: "iPhone 17 Pro — premio del primer lugar",
+    budgetOther: "Otros premios",
+    budgetNote: "Distribución prevista de la meta de $30,000 MXN. Las compras reales se registrarán por separado en la tabla de gastos.",
     spendEmpty: "Todavía no hay gastos. Cada gasto se publicará aquí en cuanto ocurra.",
     availRow: "Disponible (recaudado − gastado)",
     howH: "Cómo garantizamos la transparencia",
@@ -617,6 +659,11 @@ const STR = {
     matchNote: "This total matches the counter at the top, peso for peso.",
     spendH: "How the funds are used",
     spendNote: "Transparency goes both ways: every tournament expense will be published here with its date and description, so sponsors see exactly where their support went.",
+    budgetK: "Plan for the goal",
+    budgetH: "Prize budget",
+    budgetIphone: "iPhone 17 Pro — first-place prize",
+    budgetOther: "Other prizes",
+    budgetNote: "Planned allocation of the $30,000 MXN goal. Actual purchases will be recorded separately in the expense table.",
     spendEmpty: "No expenses yet. Every expense will be posted here as it happens.",
     availRow: "Available (raised − spent)",
     howH: "How we guarantee transparency",
