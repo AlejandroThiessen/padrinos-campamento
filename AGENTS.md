@@ -1,7 +1,7 @@
 # Sponsor Transparency Board — Agent Instructions
 
 This repo is a **public fundraising transparency ledger** for a youth camp tournament.
-Goal: **$30,000 MXN**. Live site (GitHub Pages, deploys ~1 min after push to `main`):
+Goal: **$25,000 MXN**. Live site (GitHub Pages, deploys ~1 min after push to `main`):
 
 **https://alejandrothiessen.github.io/padrinos-campamento/**
 

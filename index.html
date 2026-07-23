@@ -476,15 +476,15 @@
           <div class="k" data-i18n="budgetK"></div>
           <h3 data-i18n="budgetH"></h3>
         </div>
-        <div class="budget-total">$30,000</div>
+        <div class="budget-total">$25,000</div>
       </div>
       <div class="budget-item">
-        <div class="budget-row"><span data-i18n="budgetIphone"></span><strong>$28,499</strong></div>
-        <div class="budget-track"><div class="budget-fill" style="width:95%"></div></div>
+        <div class="budget-row"><span data-i18n="budgetIphone"></span><strong>$20,599</strong></div>
+        <div class="budget-track"><div class="budget-fill" style="width:82.4%"></div></div>
       </div>
       <div class="budget-item">
-        <div class="budget-row"><span data-i18n="budgetOther"></span><strong>$1,501</strong></div>
-        <div class="budget-track"><div class="budget-fill other" style="width:5%"></div></div>
+        <div class="budget-row"><span data-i18n="budgetOther"></span><strong>$4,401</strong></div>
+        <div class="budget-track"><div class="budget-fill other" style="width:17.6%"></div></div>
       </div>
       <p class="budget-note" data-i18n="budgetNote"></p>
     </div>
@@ -525,7 +525,7 @@
    (él recibe el código en su recibo para verificar su renglón).
    ================================================================ */
 const CONFIG = {
-  meta: 30000,          // goal in MXN
+  meta: 25000,          // goal in MXN
   umbralTablon: 1000    // >= this amount -> name on the camp board
 };
 
@@ -538,6 +538,7 @@ const PATROCINADORES = [
 ];
 
 const GASTOS = [
+  { fecha: "2026-07-23", concepto: "iPhone 17 Pro — premio del primer lugar", conceptoEn: "iPhone 17 Pro — first-place prize", monto: 20599 },
   // { fecha: "2026-08-01", concepto: "Premios — ronda final", monto: 4000 },
 ];
 
@@ -561,7 +562,7 @@ const STR = {
     eyebrow: "Transparencia de patrocinios",
     title: "Enfluss Youth Camp",
     eventDates: "20–23 de agosto",
-    lede: "Estamos reuniendo $30,000 MXN para el torneo del campamento. Esta página es el registro público: cada peso que entra y cada peso que sale queda anotado aquí, a la vista de todos los patrocinadores.",
+    lede: "Estamos reuniendo $25,000 MXN para el torneo del campamento. Esta página es el registro público: cada peso que entra y cada peso que sale queda anotado aquí, a la vista de todos los patrocinadores.",
     heroCaption: "Convivencia, propósito y recuerdos que permanecen",
     demoBanner: "Demostración — datos de muestra, no son donativos reales",
     demoOn: "Ver demostración",
@@ -600,9 +601,9 @@ const STR = {
     spendNote: "La transparencia va en ambos sentidos: cada gasto del torneo se publicará aquí con su fecha y concepto, para que los patrocinadores vean exactamente en qué se usó su apoyo.",
     budgetK: "Plan para la meta",
     budgetH: "Presupuesto de premios",
-    budgetIphone: "iPhone 17 Pro — premio del primer lugar",
+    budgetIphone: "iPhone 17 Pro — comprado para el primer lugar",
     budgetOther: "Otros premios",
-    budgetNote: "Distribución prevista de la meta de $30,000 MXN. Las compras reales se registrarán por separado en la tabla de gastos.",
+    budgetNote: "Distribución actualizada de la meta de $25,000 MXN. La compra del iPhone ya aparece en la tabla de gastos; el resto se destinará a otros premios.",
     spendEmpty: "Todavía no hay gastos. Cada gasto se publicará aquí en cuanto ocurra.",
     availRow: "Disponible (recaudado − gastado)",
     howH: "Cómo garantizamos la transparencia",
@@ -622,7 +623,7 @@ const STR = {
     eyebrow: "Sponsorship transparency",
     title: "Enfluss Youth Camp",
     eventDates: "20–23 August",
-    lede: "We are raising $30,000 MXN for the camp tournament. This page is the public record: every peso that comes in and every peso that goes out is logged here, in full view of every sponsor.",
+    lede: "We are raising $25,000 MXN for the camp tournament. This page is the public record: every peso that comes in and every peso that goes out is logged here, in full view of every sponsor.",
     heroCaption: "Community, purpose, and memories that last",
     demoBanner: "Demo — sample data, not real donations",
     demoOn: "View demo",
@@ -661,9 +662,9 @@ const STR = {
     spendNote: "Transparency goes both ways: every tournament expense will be published here with its date and description, so sponsors see exactly where their support went.",
     budgetK: "Plan for the goal",
     budgetH: "Prize budget",
-    budgetIphone: "iPhone 17 Pro — first-place prize",
+    budgetIphone: "iPhone 17 Pro — purchased for first place",
     budgetOther: "Other prizes",
-    budgetNote: "Planned allocation of the $30,000 MXN goal. Actual purchases will be recorded separately in the expense table.",
+    budgetNote: "Updated allocation of the $25,000 MXN goal. The iPhone purchase is recorded in the expense table; the remainder will go toward other prizes.",
     spendEmpty: "No expenses yet. Every expense will be posted here as it happens.",
     availRow: "Available (raised − spent)",
     howH: "How we guarantee transparency",
@@ -791,7 +792,7 @@ function render() {
   } else {
     sBody.innerHTML = gastos.map(g => `<tr>
       <td class="fecha">${esc(fmtDate(g.fecha))}</td>
-      <td>${esc(g.concepto)}</td>
+      <td>${esc(lang === "en" && g.conceptoEn ? g.conceptoEn : g.concepto)}</td>
       <td class="num">${fmt(g.monto)}</td>
     </tr>`).join("");
   }

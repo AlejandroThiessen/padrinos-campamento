@@ -1,7 +1,7 @@
 # Padrinos del Campamento Juvenil
 
 Registro público y transparente de patrocinios para el torneo del campamento juvenil.
-Meta: **$30,000 MXN**.
+Meta: **$25,000 MXN**.
 
 **Ver el tablero en vivo:** https://alejandrothiessen.github.io/padrinos-campamento/
 
