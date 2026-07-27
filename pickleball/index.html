@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#153f35">
+<title>Pickleball Team Tracker</title>
+<style>
+  :root{--ink:#16342d;--muted:#61736e;--bg:#edf4f1;--card:#fff;--green:#1f765f;--green2:#dff4eb;--gold:#efa928;--line:#cedbd6;--red:#a83e3e}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.35 system-ui,-apple-system,Segoe UI,sans-serif}
+  header{padding:22px 18px 18px;background:linear-gradient(135deg,#113b31,#246d5a);color:white;box-shadow:0 3px 12px #0002}
+  header h1{margin:0;font-size:clamp(24px,6vw,38px)} header p{margin:5px 0 0;color:#d8eee7}
+  .wrap{max-width:1500px;margin:auto;padding:14px}
+  .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 2px 8px #183d3310}
+  .stat b{display:block;font-size:22px}.stat span{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
+  button,.button{border:0;border-radius:10px;padding:10px 13px;font:inherit;font-weight:700;cursor:pointer;background:var(--green);color:#fff}
+  button.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)} button.danger{background:#fff;color:var(--red);border:1px solid #e6c5c5}
+  details{background:#fff;border:1px solid var(--line);border-radius:13px;margin:0 0 14px;overflow:hidden} summary{padding:13px 15px;font-weight:800;cursor:pointer}
+  .team-editor{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;padding:0 14px 14px}
+  .team-editor label{font-size:11px;color:var(--muted);font-weight:800}.team-editor input{display:block;width:100%;margin-top:3px;padding:10px;border:1px solid var(--line);border-radius:9px;font:inherit}
+  .notice{padding:10px 14px;margin-bottom:14px;border-radius:11px;background:#fff4d8;border:1px solid #efd28b;color:#654a0e}
+  .board{display:grid;grid-template-columns:repeat(4,minmax(275px,1fr));gap:14px;overflow-x:auto;padding:2px 2px 18px;align-items:start}
+  .round{min-width:275px}.round h2{margin:4px 0 10px;font-size:16px;text-transform:uppercase;letter-spacing:.08em;color:#506a62}
+  .matches{display:flex;flex-direction:column;gap:12px}.match{background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px;box-shadow:0 2px 8px #183d3310}
+  .match.playing{border:2px solid var(--gold);box-shadow:0 0 0 3px #efa92820}.match.finished{border-color:#86bea9;background:#fbfffd}
+  .match-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.tag{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+  .court{width:82px;border:1px solid var(--line);border-radius:8px;padding:5px 7px;font:inherit;font-size:12px}
+  .side{display:grid;grid-template-columns:1fr 53px;gap:6px;margin:5px 0}.team{width:100%;text-align:left;background:#f4f8f6;color:var(--ink);border:1px solid #dce7e2;padding:10px;border-radius:9px;white-space:normal}
+  .team:hover{border-color:var(--green)}.team.winner{background:var(--green2);border-color:#79bca4;color:#13523f}.team:disabled{cursor:not-allowed;color:#899791;background:#f3f5f4}
+  .score{width:100%;border:1px solid var(--line);border-radius:9px;text-align:center;font:bold 18px system-ui}
+  .match-actions{display:flex;gap:6px;margin-top:8px}.match-actions button{flex:1;padding:8px;font-size:12px}.start{background:var(--gold);color:#382600}.clear{background:#eef3f1;color:#4d625b}
+  .status-lists{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.status-box{background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px}.status-box h3{margin:0 0 7px;font-size:14px}.status-box ul{margin:0;padding-left:19px;color:var(--muted)}
+  footer{color:var(--muted);text-align:center;padding:12px 4px 28px;font-size:12px}
+  @media(max-width:700px){.summary{grid-template-columns:repeat(3,1fr)}.stat{padding:9px}.stat b{font-size:18px}.status-lists{grid-template-columns:1fr}.board{grid-template-columns:repeat(4,86vw)}}
+</style>
+</head>
+<body>
+<header><h1>🏓 Pickleball Tracker</h1><p>Tap a team to advance the winner. Everything saves automatically on this device.</p></header>
+<div class="wrap">
+  <div class="summary"><div class="stat"><b id="playingCount">0</b><span>Playing now</span></div><div class="stat"><b id="doneCount">1</b><span>Finished</span></div><div class="stat"><b id="teamCount">14</b><span>Teams</span></div></div>
+  <div class="toolbar"><button id="shareBtn">Share update</button><button class="secondary" id="printBtn">Print</button><button class="danger" id="resetBtn">Reset tracker</button></div>
+  <div class="notice">I transcribed the photo as closely as possible. Open <b>Edit team names</b> to correct any spelling. “Fernando,” “Erny,” and “Orvin” were the least clear.</div>
+  <details><summary>Edit team names</summary><div class="team-editor" id="teamEditor"></div></details>
+  <div class="status-lists"><div class="status-box"><h3>🟠 On court</h3><ul id="onCourt"><li>No games marked as playing.</li></ul></div><div class="status-box"><h3>🟢 Ready to play</h3><ul id="ready"><li>Loading…</li></ul></div></div>
+  <div class="board" id="board"></div>
+  <footer>Winner’s bracket • Scores, courts, names, and winners save automatically in your browser.</footer>
+</div>
+<script>
+const DEFAULT_TEAMS={
+ t1:'Diego + Sonia',t2:'Monica + Valeria',t3:'Tania + Orvin',t4:'Destiny + Ervin',t5:'Ashley + Erny',t6:'Alex + Emily',t7:'Nancy + Marcos',
+ t8:'Jessica + Joel',t9:'Karina + Ricky',t10:'Fernando + Jimmy',t11:'Ruben + Marisol',t12:'Alex + David',t13:'Jeffrey + Benny',t14:'Juan + Benny'
+};
+const MATCHES=[
+ {id:'m1',round:'Opening round',a:['team','t2'],b:['team','t3']},
+ {id:'m2',round:'Opening round',a:['team','t4'],b:['team','t5']},
+ {id:'m3',round:'Opening round',a:['team','t6'],b:['team','t7']},
+ {id:'m4',round:'Opening round',a:['team','t8'],b:['team','t9']},
+ {id:'m5',round:'Opening round',a:['team','t10'],b:['team','t11']},
+ {id:'m6',round:'Opening round',a:['team','t12'],b:['team','t13']},
+ {id:'q1',round:'Quarterfinals',a:['team','t1'],b:['winner','m1']},
+ {id:'q2',round:'Quarterfinals',a:['winner','m2'],b:['winner','m3']},
+ {id:'q3',round:'Quarterfinals',a:['winner','m4'],b:['winner','m5']},
+ {id:'q4',round:'Quarterfinals',a:['winner','m6'],b:['team','t14']},
+ {id:'s1',round:'Semifinals',a:['winner','q1'],b:['winner','q2']},
+ {id:'s2',round:'Semifinals',a:['winner','q3'],b:['winner','q4']},
+ {id:'f1',round:'Final',a:['winner','s1'],b:['winner','s2']}
+];
+const ROUNDS=['Opening round','Quarterfinals','Semifinals','Final'];
+const KEY='pickleball-tracker-v1';
+let state;
+try{state=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!state){state={teams:{...DEFAULT_TEAMS},games:{m3:{winner:'t6',status:'finished',scores:['',''],court:''}}}}
+state.teams={...DEFAULT_TEAMS,...(state.teams||{})}; state.games=state.games||{};
+const getGame=id=>state.games[id]||(state.games[id]={winner:null,status:'waiting',scores:['',''],court:''});
+function participant(slot){if(slot[0]==='team')return slot[1];return getGame(slot[1]).winner||null}
+function normalize(){let changed=true;while(changed){changed=false;for(const m of MATCHES){const g=getGame(m.id),p=[participant(m.a),participant(m.b)];if(g.winner&&!p.includes(g.winner)){g.winner=null;g.status='waiting';g.scores=['',''];changed=true}}}}
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function setWinner(id,team){const g=getGame(id);g.winner=team;g.status='finished';normalize();save();render()}
+function setStatus(id){const g=getGame(id);g.status=g.status==='playing'?'waiting':'playing';if(g.status==='playing')g.winner=null;normalize();save();render()}
+function clearGame(id){state.games[id]={winner:null,status:'waiting',scores:['',''],court:''};normalize();save();render()}
+function teamButton(id,team,slot){const name=team?state.teams[team]:'Waiting for winner';return `<div class="side"><button class="team ${team&&getGame(id).winner===team?'winner':''}" ${!team?'disabled':''} data-win="${id}" data-team="${team||''}">${team&&getGame(id).winner===team?'✓ ':''}${escapeHtml(name)}</button><input class="score" inputmode="numeric" placeholder="0" data-score="${id}" data-slot="${slot}" value="${escapeHtml(getGame(id).scores?.[slot]||'')}"></div>`}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){normalize();const board=document.getElementById('board');board.innerHTML=ROUNDS.map(round=>`<section class="round"><h2>${round}</h2><div class="matches">${MATCHES.filter(m=>m.round===round).map(m=>{const g=getGame(m.id),a=participant(m.a),b=participant(m.b);return `<article class="match ${g.status}"><div class="match-top"><span class="tag">${m.id.toUpperCase()} · ${g.status}</span><input class="court" placeholder="Court #" data-court="${m.id}" value="${escapeHtml(g.court||'')}"></div>${teamButton(m.id,a,0)}${teamButton(m.id,b,1)}<div class="match-actions"><button class="start" data-start="${m.id}">${g.status==='playing'?'Pause':'Start game'}</button><button class="clear" data-clear="${m.id}">Clear</button></div></article>`}).join('')}</div></section>`).join('');
+ document.querySelectorAll('[data-win]').forEach(x=>x.onclick=()=>x.dataset.team&&setWinner(x.dataset.win,x.dataset.team));
+ document.querySelectorAll('[data-start]').forEach(x=>x.onclick=()=>setStatus(x.dataset.start));document.querySelectorAll('[data-clear]').forEach(x=>x.onclick=()=>clearGame(x.dataset.clear));
+ document.querySelectorAll('[data-score]').forEach(x=>x.oninput=()=>{const g=getGame(x.dataset.score);g.scores=g.scores||['',''];g.scores[+x.dataset.slot]=x.value;save()});
+ document.querySelectorAll('[data-court]').forEach(x=>x.oninput=()=>{getGame(x.dataset.court).court=x.value;save()});
+ const playing=MATCHES.filter(m=>getGame(m.id).status==='playing'),done=MATCHES.filter(m=>getGame(m.id).winner),ready=MATCHES.filter(m=>{const g=getGame(m.id);return participant(m.a)&&participant(m.b)&&!g.winner&&g.status!=='playing'});
+ document.getElementById('playingCount').textContent=playing.length;document.getElementById('doneCount').textContent=done.length;document.getElementById('teamCount').textContent=Object.keys(state.teams).length;
+ document.getElementById('onCourt').innerHTML=playing.length?playing.map(m=>`<li>${escapeHtml(state.teams[participant(m.a)])} vs ${escapeHtml(state.teams[participant(m.b)])}${getGame(m.id).court?' — '+escapeHtml(getGame(m.id).court):''}</li>`).join(''):'<li>No games marked as playing.</li>';
+ document.getElementById('ready').innerHTML=ready.length?ready.map(m=>`<li>${escapeHtml(state.teams[participant(m.a)])} vs ${escapeHtml(state.teams[participant(m.b)])}</li>`).join(''):'<li>No matches ready yet.</li>';
+}
+function renderEditor(){document.getElementById('teamEditor').innerHTML=Object.entries(state.teams).map(([id,name],i)=>`<label>Team ${i+1}<input data-edit="${id}" value="${escapeHtml(name)}"></label>`).join('');document.querySelectorAll('[data-edit]').forEach(x=>x.onchange=()=>{state.teams[x.dataset.edit]=x.value.trim()||DEFAULT_TEAMS[x.dataset.edit];save();render()})}
+function shareText(){const play=MATCHES.filter(m=>getGame(m.id).status==='playing'),done=MATCHES.filter(m=>getGame(m.id).winner);return `🏓 Pickleball update\n\nPlaying now:\n${play.length?play.map(m=>`${state.teams[participant(m.a)]} vs ${state.teams[participant(m.b)]}`).join('\n'):'None'}\n\nFinished:\n${done.map(m=>`${state.teams[getGame(m.id).winner]} won ${m.id.toUpperCase()}`).join('\n')||'None'}`}
+document.getElementById('shareBtn').onclick=async()=>{const text=shareText();if(navigator.share)try{return await navigator.share({title:'Pickleball update',text})}catch(e){}await navigator.clipboard.writeText(text);alert('Update copied!')};document.getElementById('printBtn').onclick=()=>print();document.getElementById('resetBtn').onclick=()=>{if(confirm('Reset every score, court, and winner?')){localStorage.removeItem(KEY);location.reload()}};
+renderEditor();render();
+</script>
+</body>
+</html>
