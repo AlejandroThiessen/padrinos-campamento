@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#153f35">
-<title>Pickleball Team Tracker</title>
+<title>Double-Elimination Pickleball Tracker</title>
 <style>
   :root{--ink:#16342d;--muted:#61736e;--bg:#edf4f1;--card:#fff;--green:#1f765f;--green2:#dff4eb;--gold:#efa928;--line:#cedbd6;--red:#a83e3e}
   *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.35 system-ui,-apple-system,Segoe UI,sans-serif}
@@ -21,7 +21,7 @@
   .team-editor{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;padding:0 14px 14px}
   .team-editor label{font-size:11px;color:var(--muted);font-weight:800}.team-editor input{display:block;width:100%;margin-top:3px;padding:10px;border:1px solid var(--line);border-radius:9px;font:inherit}
   .notice{padding:10px 14px;margin-bottom:14px;border-radius:11px;background:#fff4d8;border:1px solid #efd28b;color:#654a0e}
-  .board{display:grid;grid-template-columns:repeat(4,minmax(275px,1fr));gap:14px;overflow-x:auto;padding:2px 2px 18px;align-items:start}
+  .board{display:grid;gap:14px;overflow-x:auto;padding:2px 2px 18px;align-items:start}.winner-board{grid-template-columns:repeat(4,minmax(275px,1fr))}.loser-board{grid-template-columns:repeat(6,minmax(275px,1fr))}.champ-board{grid-template-columns:repeat(2,minmax(275px,1fr))}.bracket-title{margin:20px 0 10px;font-size:22px}.champion-banner{padding:16px;margin:0 0 14px;border-radius:13px;background:#fff4d8;border:2px solid var(--gold);font-size:20px;text-align:center}
   .round{min-width:275px}.round h2{margin:4px 0 10px;font-size:16px;text-transform:uppercase;letter-spacing:.08em;color:#506a62}
   .matches{display:flex;flex-direction:column;gap:12px}.match{background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px;box-shadow:0 2px 8px #183d3310}
   .match.playing{border:2px solid var(--gold);box-shadow:0 0 0 3px #efa92820}.match.finished{border-color:#86bea9;background:#fbfffd}
@@ -33,26 +33,29 @@
   .match-actions{display:flex;gap:6px;margin-top:8px}.match-actions button{flex:1;padding:8px;font-size:12px}.start{background:var(--gold);color:#382600}.clear{background:#eef3f1;color:#4d625b}
   .status-lists{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.status-box{background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px}.status-box h3{margin:0 0 7px;font-size:14px}.status-box ul{margin:0;padding-left:19px;color:var(--muted)}
   footer{color:var(--muted);text-align:center;padding:12px 4px 28px;font-size:12px}
-  @media(max-width:700px){.summary{grid-template-columns:repeat(3,1fr)}.stat{padding:9px}.stat b{font-size:18px}.status-lists{grid-template-columns:1fr}.board{grid-template-columns:repeat(4,86vw)}}
+  @media(max-width:700px){.summary{grid-template-columns:repeat(3,1fr)}.stat{padding:9px}.stat b{font-size:18px}.status-lists{grid-template-columns:1fr}.winner-board{grid-template-columns:repeat(4,86vw)}.loser-board{grid-template-columns:repeat(6,86vw)}.champ-board{grid-template-columns:repeat(2,86vw)}}
 </style>
 </head>
 <body>
-<header><h1>🏓 Pickleball Tracker</h1><p>Tap a team to advance the winner. Everything saves automatically on this device.</p></header>
+<header><h1>🏓 Double-Elimination Tracker</h1><p>One loss moves a team to the lower bracket. A second loss eliminates them.</p></header>
 <div class="wrap">
   <div class="summary"><div class="stat"><b id="playingCount">0</b><span>Playing now</span></div><div class="stat"><b id="doneCount">1</b><span>Finished</span></div><div class="stat"><b id="teamCount">14</b><span>Teams</span></div></div>
   <div class="toolbar"><button id="shareBtn">Share update</button><button class="secondary" id="printBtn">Print</button><button class="danger" id="resetBtn">Reset tracker</button></div>
-  <div class="notice">I transcribed the photo as closely as possible. Open <b>Edit team names</b> to correct any spelling. “Fernando,” “Erny,” and “Orvin” were the least clear.</div>
+  <div class="notice"><b>Your existing data is kept.</b> All winner-bracket results, scores, courts, and name corrections already saved on this phone carry into the double-elimination bracket.</div>
   <details><summary>Edit team names</summary><div class="team-editor" id="teamEditor"></div></details>
   <div class="status-lists"><div class="status-box"><h3>🟠 On court</h3><ul id="onCourt"><li>No games marked as playing.</li></ul></div><div class="status-box"><h3>🟢 Ready to play</h3><ul id="ready"><li>Loading…</li></ul></div></div>
-  <div class="board" id="board"></div>
-  <footer>Winner’s bracket • Scores, courts, names, and winners save automatically in your browser.</footer>
+  <div class="champion-banner" id="championBanner" hidden></div>
+  <h2 class="bracket-title">Winner’s Bracket</h2><div class="board winner-board" id="winnerBoard"></div>
+  <h2 class="bracket-title">Lower Bracket</h2><div class="board loser-board" id="loserBoard"></div>
+  <h2 class="bracket-title">Championship</h2><div class="board champ-board" id="champBoard"></div>
+  <footer>Double elimination • Existing browser data is preserved • Scores, courts, names, and winners save automatically.</footer>
 </div>
 <script>
 const DEFAULT_TEAMS={
  t1:'Diego + Sonia',t2:'Monica + Valeria',t3:'Tania + Orvin',t4:'Destiny + Ervin',t5:'Ashley + Erny',t6:'Alex + Emily',t7:'Nancy + Marcos',
  t8:'Jessica + Joel',t9:'Karina + Ricky',t10:'Fernando + Jimmy',t11:'Ruben + Marisol',t12:'Alex + David',t13:'Jeffrey + Benny',t14:'Juan + Benny'
 };
-const MATCHES=[
+const WINNER_MATCHES=[
  {id:'m1',round:'Opening round',a:['team','t2'],b:['team','t3']},
  {id:'m2',round:'Opening round',a:['team','t4'],b:['team','t5']},
  {id:'m3',round:'Opening round',a:['team','t6'],b:['team','t7']},
@@ -65,36 +68,75 @@ const MATCHES=[
  {id:'q4',round:'Quarterfinals',a:['winner','m6'],b:['team','t14']},
  {id:'s1',round:'Semifinals',a:['winner','q1'],b:['winner','q2']},
  {id:'s2',round:'Semifinals',a:['winner','q3'],b:['winner','q4']},
- {id:'f1',round:'Final',a:['winner','s1'],b:['winner','s2']}
+ {id:'f1',round:'Winner final',a:['winner','s1'],b:['winner','s2']}
 ];
-const ROUNDS=['Opening round','Quarterfinals','Semifinals','Final'];
+const LOSER_MATCHES=[
+ {id:'l1',round:'Lower round 1',a:['loser','m1'],b:['loser','m2']},
+ {id:'l2',round:'Lower round 1',a:['loser','m4'],b:['loser','m5']},
+ {id:'l3',round:'Lower round 2',a:['winner','l1'],b:['loser','q2']},
+ {id:'l4',round:'Lower round 2',a:['loser','m3'],b:['loser','q1']},
+ {id:'l5',round:'Lower round 2',a:['winner','l2'],b:['loser','q4']},
+ {id:'l6',round:'Lower round 2',a:['loser','m6'],b:['loser','q3']},
+ {id:'l7',round:'Lower round 3',a:['winner','l3'],b:['winner','l4']},
+ {id:'l8',round:'Lower round 3',a:['winner','l5'],b:['winner','l6']},
+ {id:'l9',round:'Lower round 4',a:['winner','l7'],b:['loser','s2']},
+ {id:'l10',round:'Lower round 4',a:['winner','l8'],b:['loser','s1']},
+ {id:'l11',round:'Lower round 5',a:['winner','l9'],b:['winner','l10']},
+ {id:'l12',round:'Lower final',a:['winner','l11'],b:['loser','f1']}
+];
+const CHAMP_MATCHES=[
+ {id:'gf1',round:'Grand final',a:['winner','f1'],b:['winner','l12']},
+ {id:'gf2',round:'Reset final',a:['reset','wb'],b:['reset','lb']}
+];
+const ALL_MATCHES=[...WINNER_MATCHES,...LOSER_MATCHES,...CHAMP_MATCHES];
+const BY_ID=Object.fromEntries(ALL_MATCHES.map(m=>[m.id,m]));
+const WINNER_ROUNDS=['Opening round','Quarterfinals','Semifinals','Winner final'];
+const LOSER_ROUNDS=['Lower round 1','Lower round 2','Lower round 3','Lower round 4','Lower round 5','Lower final'];
+const CHAMP_ROUNDS=['Grand final','Reset final'];
 const KEY='pickleball-tracker-v1';
 let state;
 try{state=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!state){state={teams:{...DEFAULT_TEAMS},games:{m3:{winner:'t6',status:'finished',scores:['',''],court:''}}}}
-state.teams={...DEFAULT_TEAMS,...(state.teams||{})}; state.games=state.games||{};
+state.teams={...DEFAULT_TEAMS,...(state.teams||{})}; state.games=state.games||{}; state.version=2;
 const getGame=id=>state.games[id]||(state.games[id]={winner:null,status:'waiting',scores:['',''],court:''});
-function participant(slot){if(slot[0]==='team')return slot[1];return getGame(slot[1]).winner||null}
-function normalize(){let changed=true;while(changed){changed=false;for(const m of MATCHES){const g=getGame(m.id),p=[participant(m.a),participant(m.b)];if(g.winner&&!p.includes(g.winner)){g.winner=null;g.status='waiting';g.scores=['',''];changed=true}}}}
+function baseParticipant(slot){
+ if(slot[0]==='team')return slot[1];
+ if(slot[0]==='winner')return getGame(slot[1]).winner||null;
+ if(slot[0]==='loser')return loserOf(slot[1]);
+ return null;
+}
+function loserOf(id){const m=BY_ID[id],g=getGame(id);if(!m||!g.winner)return null;const a=participant(m.a),b=participant(m.b);if(!a||!b)return null;return g.winner===a?b:g.winner===b?a:null}
+function resetNeeded(){const wb=baseParticipant(['winner','f1']),lb=baseParticipant(['winner','l12']),g=getGame('gf1');return !!(wb&&lb&&g.winner===lb)}
+function participant(slot){if(slot[0]!=='reset')return baseParticipant(slot);if(!resetNeeded())return null;return slot[1]==='wb'?baseParticipant(['winner','f1']):baseParticipant(['winner','l12'])}
+function normalize(){let changed=true,guard=0;while(changed&&guard++<10){changed=false;for(const m of ALL_MATCHES){const g=getGame(m.id),p=[participant(m.a),participant(m.b)];if(g.winner&&!p.includes(g.winner)){g.winner=null;g.status='waiting';g.scores=['',''];changed=true}}}if(!resetNeeded()){const g=getGame('gf2');if(g.winner||g.status!=='waiting'||(g.scores||[]).some(Boolean)){state.games.gf2={winner:null,status:'waiting',scores:['',''],court:''}}}}
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
 function setWinner(id,team){const g=getGame(id);g.winner=team;g.status='finished';normalize();save();render()}
-function setStatus(id){const g=getGame(id);g.status=g.status==='playing'?'waiting':'playing';if(g.status==='playing')g.winner=null;normalize();save();render()}
+function setStatus(id){const m=BY_ID[id],a=participant(m.a),b=participant(m.b);if(!a||!b)return;const g=getGame(id);g.status=g.status==='playing'?'waiting':'playing';if(g.status==='playing')g.winner=null;normalize();save();render()}
 function clearGame(id){state.games[id]={winner:null,status:'waiting',scores:['',''],court:''};normalize();save();render()}
-function teamButton(id,team,slot){const name=team?state.teams[team]:'Waiting for winner';return `<div class="side"><button class="team ${team&&getGame(id).winner===team?'winner':''}" ${!team?'disabled':''} data-win="${id}" data-team="${team||''}">${team&&getGame(id).winner===team?'✓ ':''}${escapeHtml(name)}</button><input class="score" inputmode="numeric" placeholder="0" data-score="${id}" data-slot="${slot}" value="${escapeHtml(getGame(id).scores?.[slot]||'')}"></div>`}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function render(){normalize();const board=document.getElementById('board');board.innerHTML=ROUNDS.map(round=>`<section class="round"><h2>${round}</h2><div class="matches">${MATCHES.filter(m=>m.round===round).map(m=>{const g=getGame(m.id),a=participant(m.a),b=participant(m.b);return `<article class="match ${g.status}"><div class="match-top"><span class="tag">${m.id.toUpperCase()} · ${g.status}</span><input class="court" placeholder="Court #" data-court="${m.id}" value="${escapeHtml(g.court||'')}"></div>${teamButton(m.id,a,0)}${teamButton(m.id,b,1)}<div class="match-actions"><button class="start" data-start="${m.id}">${g.status==='playing'?'Pause':'Start game'}</button><button class="clear" data-clear="${m.id}">Clear</button></div></article>`}).join('')}</div></section>`).join('');
+function teamButton(id,team,slot){const name=team?state.teams[team]:'Waiting for result';return `<div class="side"><button class="team ${team&&getGame(id).winner===team?'winner':''}" ${!team?'disabled':''} data-win="${id}" data-team="${team||''}">${team&&getGame(id).winner===team?'✓ ':''}${escapeHtml(name)}</button><input class="score" inputmode="numeric" placeholder="0" data-score="${id}" data-slot="${slot}" value="${escapeHtml(getGame(id).scores?.[slot]||'')}"></div>`}
+function matchCard(m){const g=getGame(m.id),a=participant(m.a),b=participant(m.b),playable=!!(a&&b);return `<article class="match ${g.status}"><div class="match-top"><span class="tag">${m.id.toUpperCase()} · ${g.status}</span><input class="court" placeholder="Court #" data-court="${m.id}" value="${escapeHtml(g.court||'')}"></div>${teamButton(m.id,a,0)}${teamButton(m.id,b,1)}<div class="match-actions"><button class="start" data-start="${m.id}" ${!playable?'disabled':''}>${g.status==='playing'?'Pause':'Start game'}</button><button class="clear" data-clear="${m.id}">Clear</button></div></article>`}
+function renderBoard(target,matches,rounds){document.getElementById(target).innerHTML=rounds.map(round=>{let list=matches.filter(m=>m.round===round);if(round==='Reset final'&&!resetNeeded())list=[];return `<section class="round"><h2>${round}</h2><div class="matches">${list.length?list.map(matchCard).join(''):'<div class="match"><span class="tag">Only needed if the lower-bracket winner wins Grand Final 1.</span></div>'}</div></section>`}).join('')}
+function champion(){const reset=getGame('gf2').winner;if(reset)return reset;const g=getGame('gf1');return g.winner&&!resetNeeded()?g.winner:null}
+function bindControls(){
  document.querySelectorAll('[data-win]').forEach(x=>x.onclick=()=>x.dataset.team&&setWinner(x.dataset.win,x.dataset.team));
- document.querySelectorAll('[data-start]').forEach(x=>x.onclick=()=>setStatus(x.dataset.start));document.querySelectorAll('[data-clear]').forEach(x=>x.onclick=()=>clearGame(x.dataset.clear));
+ document.querySelectorAll('[data-start]').forEach(x=>x.onclick=()=>setStatus(x.dataset.start));
+ document.querySelectorAll('[data-clear]').forEach(x=>x.onclick=()=>clearGame(x.dataset.clear));
  document.querySelectorAll('[data-score]').forEach(x=>x.oninput=()=>{const g=getGame(x.dataset.score);g.scores=g.scores||['',''];g.scores[+x.dataset.slot]=x.value;save()});
  document.querySelectorAll('[data-court]').forEach(x=>x.oninput=()=>{getGame(x.dataset.court).court=x.value;save()});
- const playing=MATCHES.filter(m=>getGame(m.id).status==='playing'),done=MATCHES.filter(m=>getGame(m.id).winner),ready=MATCHES.filter(m=>{const g=getGame(m.id);return participant(m.a)&&participant(m.b)&&!g.winner&&g.status!=='playing'});
+}
+function render(){normalize();renderBoard('winnerBoard',WINNER_MATCHES,WINNER_ROUNDS);renderBoard('loserBoard',LOSER_MATCHES,LOSER_ROUNDS);renderBoard('champBoard',CHAMP_MATCHES,CHAMP_ROUNDS);bindControls();
+ const visible=ALL_MATCHES.filter(m=>m.id!=='gf2'||resetNeeded()),playing=visible.filter(m=>getGame(m.id).status==='playing'),done=visible.filter(m=>getGame(m.id).winner),ready=visible.filter(m=>{const g=getGame(m.id);return participant(m.a)&&participant(m.b)&&!g.winner&&g.status!=='playing'});
  document.getElementById('playingCount').textContent=playing.length;document.getElementById('doneCount').textContent=done.length;document.getElementById('teamCount').textContent=Object.keys(state.teams).length;
  document.getElementById('onCourt').innerHTML=playing.length?playing.map(m=>`<li>${escapeHtml(state.teams[participant(m.a)])} vs ${escapeHtml(state.teams[participant(m.b)])}${getGame(m.id).court?' — '+escapeHtml(getGame(m.id).court):''}</li>`).join(''):'<li>No games marked as playing.</li>';
  document.getElementById('ready').innerHTML=ready.length?ready.map(m=>`<li>${escapeHtml(state.teams[participant(m.a)])} vs ${escapeHtml(state.teams[participant(m.b)])}</li>`).join(''):'<li>No matches ready yet.</li>';
+ const champ=champion(),banner=document.getElementById('championBanner');banner.hidden=!champ;banner.innerHTML=champ?`🏆 Champion: <b>${escapeHtml(state.teams[champ])}</b>`:'';save();
 }
 function renderEditor(){document.getElementById('teamEditor').innerHTML=Object.entries(state.teams).map(([id,name],i)=>`<label>Team ${i+1}<input data-edit="${id}" value="${escapeHtml(name)}"></label>`).join('');document.querySelectorAll('[data-edit]').forEach(x=>x.onchange=()=>{state.teams[x.dataset.edit]=x.value.trim()||DEFAULT_TEAMS[x.dataset.edit];save();render()})}
-function shareText(){const play=MATCHES.filter(m=>getGame(m.id).status==='playing'),done=MATCHES.filter(m=>getGame(m.id).winner);return `🏓 Pickleball update\n\nPlaying now:\n${play.length?play.map(m=>`${state.teams[participant(m.a)]} vs ${state.teams[participant(m.b)]}`).join('\n'):'None'}\n\nFinished:\n${done.map(m=>`${state.teams[getGame(m.id).winner]} won ${m.id.toUpperCase()}`).join('\n')||'None'}`}
-document.getElementById('shareBtn').onclick=async()=>{const text=shareText();if(navigator.share)try{return await navigator.share({title:'Pickleball update',text})}catch(e){}await navigator.clipboard.writeText(text);alert('Update copied!')};document.getElementById('printBtn').onclick=()=>print();document.getElementById('resetBtn').onclick=()=>{if(confirm('Reset every score, court, and winner?')){localStorage.removeItem(KEY);location.reload()}};
+function shareText(){const visible=ALL_MATCHES.filter(m=>m.id!=='gf2'||resetNeeded()),play=visible.filter(m=>getGame(m.id).status==='playing'),done=visible.filter(m=>getGame(m.id).winner),champ=champion();return `🏓 Double-elimination pickleball update\n\nPlaying now:\n${play.length?play.map(m=>`${state.teams[participant(m.a)]} vs ${state.teams[participant(m.b)]}`).join('\n'):'None'}\n\nFinished:\n${done.map(m=>`${state.teams[getGame(m.id).winner]} won ${m.id.toUpperCase()}`).join('\n')||'None'}${champ?`\n\n🏆 Champion: ${state.teams[champ]}`:''}`}
+document.getElementById('shareBtn').onclick=async()=>{const text=shareText();if(navigator.share)try{return await navigator.share({title:'Pickleball update',text})}catch(e){}await navigator.clipboard.writeText(text);alert('Update copied!')};
+document.getElementById('printBtn').onclick=()=>print();
+document.getElementById('resetBtn').onclick=()=>{if(confirm('Reset every score, court, and winner?')){localStorage.removeItem(KEY);location.reload()}};
 renderEditor();render();
 </script>
 </body>
