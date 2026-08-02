@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>Enfluss Youth Camp · 20–23 August — Patrocinios</title>
+<title>Enfluss Youth Camp · 20–22 August — Patrocinios</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root {
@@ -65,6 +65,19 @@
     -webkit-font-smoothing: antialiased;
   }
   .wrap { max-width: 860px; margin: 0 auto; padding: 28px 20px 72px; }
+
+  /* ---------- important event update ---------- */
+  .event-alert {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--gold-soft); color: var(--ink);
+    border: 2px solid var(--gold); border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 22px;
+    box-shadow: var(--shadow); font-size: 15px; font-weight: 700;
+  }
+  .event-alert-icon {
+    color: var(--gold); font-size: 20px; line-height: 1.15;
+    letter-spacing: -.08em; flex: none;
+  }
 
   /* ---------- demo banner ---------- */
   #demoBanner {
@@ -358,6 +371,10 @@
 <body>
 
 <div class="wrap">
+  <div class="event-alert" role="note" aria-live="polite">
+    <span class="event-alert-icon" aria-hidden="true">!!</span>
+    <span data-i18n="eventAlert"></span>
+  </div>
   <div id="demoBanner" data-i18n="demoBanner"></div>
 
   <header>
@@ -564,7 +581,8 @@ const STR = {
   es: {
     eyebrow: "Transparencia de patrocinios",
     title: "Enfluss Youth Camp",
-    eventDates: "20–23 de agosto",
+    eventDates: "20–22 de agosto",
+    eventAlert: "Debido a algunos cambios en el evento, se realizará en la Iglesia LebensWasser del 20 al 22 de agosto.",
     lede: "Estamos reuniendo $25,000 MXN para el torneo del campamento. Esta página es el registro público: cada peso que entra y cada peso que sale queda anotado aquí, a la vista de todos los patrocinadores.",
     heroCaption: "Convivencia, propósito y recuerdos que permanecen",
     demoBanner: "Demostración — datos de muestra, no son donativos reales",
@@ -625,7 +643,8 @@ const STR = {
   en: {
     eyebrow: "Sponsorship transparency",
     title: "Enfluss Youth Camp",
-    eventDates: "20–23 August",
+    eventDates: "20–22 August",
+    eventAlert: "Due to some changes of the event, it will be hosted at LebensWasser Church August 20–22.",
     lede: "We are raising $25,000 MXN for the camp tournament. This page is the public record: every peso that comes in and every peso that goes out is logged here, in full view of every sponsor.",
     heroCaption: "Community, purpose, and memories that last",
     demoBanner: "Demo — sample data, not real donations",
