@@ -43,6 +43,18 @@ Rules:
 - Donations of **$1,000+ with publico:true** automatically get the ★ camp-board badge;
   the page handles this — nothing extra to do.
 
+## Recording an in-kind donation
+
+For donated products rather than cash:
+
+1. Add the public sponsor to `PATROCINADORES` with `tipo: "especie"`. Convert the
+   documented value to MXN and round `monto` to a whole peso for the receipt ledger.
+2. Add the itemized products to `DONACIONES_ESPECIE`, including the receipt folio,
+   exchange rate, quantities, bilingual descriptions, USD values, and any quoted tax.
+3. Do **not** add donated products to `GASTOS`; they were contributed directly and
+   were not purchased using fundraiser cash. The page includes their value in total
+   support while excluding it from the cash-available calculation.
+
 ## Recording an expense
 
 Add to the `GASTOS` array: `{ fecha: "2026-08-01", concepto: "Premios — ronda final", monto: 4000 },`

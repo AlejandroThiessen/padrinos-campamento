@@ -315,6 +315,12 @@
     color: var(--ink-3); background: var(--line-soft);
     border-radius: 999px; padding: 3px 10px;
   }
+  .chip-kind {
+    display: inline-flex; align-self: flex-start;
+    font-size: 11.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+    color: var(--accent); background: var(--accent-soft);
+    border-radius: 999px; padding: 3px 10px;
+  }
   .empty {
     border: 1.5px dashed var(--line); border-radius: 12px;
     padding: 30px 22px; text-align: center; color: var(--ink-3); font-size: 15px;
@@ -351,6 +357,10 @@
     background: var(--accent); flex: none;
   }
   td.empty-cell { text-align: center; color: var(--ink-3); padding: 26px 16px; }
+  .in-kind-block { margin: 18px 0; }
+  .in-kind-block h3 { margin: 0 0 5px; font-family: var(--serif); font-size: 22px; }
+  .in-kind-block .sec-note { margin-bottom: 12px; }
+  .kind-source { color: var(--ink-2); font-size: 12px; }
 
   /* ---------- how it works ---------- */
   .how { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -505,6 +515,28 @@
       </div>
       <p class="budget-note" data-i18n="budgetNote"></p>
     </div>
+    <div class="in-kind-block">
+      <h3 data-i18n="inKindH"></h3>
+      <p class="sec-note" data-i18n="inKindNote"></p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr>
+            <th data-i18n="colSponsor"></th>
+            <th data-i18n="colConcept"></th>
+            <th class="num" data-i18n="colQty"></th>
+            <th class="num" data-i18n="colUsd"></th>
+            <th class="num" data-i18n="colMxnValue"></th>
+          </tr></thead>
+          <tbody id="inKindBody"></tbody>
+          <tfoot><tr>
+            <td colspan="3" data-i18n="inKindTotal"></td>
+            <td class="num" id="inKindUsdTotal">US$0.00</td>
+            <td class="num" id="inKindMxnTotal">$0</td>
+          </tr></tfoot>
+        </table>
+      </div>
+      <div class="match-note"><span class="dot"></span><span id="inKindMatchNote"></span></div>
+    </div>
     <div class="table-scroll">
       <table>
         <thead><tr>
@@ -555,11 +587,26 @@ const PATROCINADORES = [
   { folio: "F-006", fecha: "2026-08-02", nombre: "Luxe Landscaping", publico: true, monto: 3000, logo: "assets/logos/luxe-landscaping.webp" },
   { folio: "F-007", fecha: "2026-08-02", nombre: "ROBLE-62", publico: false, monto: 3000 },
   { folio: "F-008", fecha: "2026-08-02", nombre: "LW Lead Pastor Jacob Kornelsen", publico: true, monto: 1670 },
+  { folio: "F-009", fecha: "2026-08-06", nombre: "Compu Service", publico: true, monto: 2090, tipo: "especie", logo: "assets/logos/compu-service.webp" },
 ];
 
 const GASTOS = [
   { fecha: "2026-07-23", concepto: "iPhone 17 Pro — premio del primer lugar", conceptoEn: "iPhone 17 Pro — first-place prize", monto: 20599 },
   // { fecha: "2026-08-01", concepto: "Premios — ronda final", monto: 4000 },
+];
+
+const DONACIONES_ESPECIE = [
+  {
+    folio: "F-009", fecha: "2026-08-06", patrocinador: "Compu Service",
+    tipoCambio: 16.95,
+    items: [
+      { concepto: "UGREEN Audífonos True Wireless Bluetooth 5.4, 5.5 h (PN 45110)", conceptoEn: "UGREEN True Wireless Bluetooth 5.4 earbuds, 5.5 h (PN 45110)", cantidad: 1, usd: 21.54 },
+      { concepto: "UGREEN Power Bank 10,000 mAh, 22.5 W, ultra delgado negro (PN 25742)", conceptoEn: "UGREEN 10,000 mAh, 22.5 W ultra-slim black power bank (PN 25742)", cantidad: 1, usd: 32.75 },
+      { concepto: "UGREEN Audífonos HiTune Max2 Bluetooth 5.4, 600 mAh (PN 45018)", conceptoEn: "UGREEN HiTune Max2 Bluetooth 5.4 headphones, 600 mAh (PN 45018)", cantidad: 1, usd: 25.85 },
+      { concepto: "UGREEN Audífonos HiTune Max2 blancos (PN 45017)", conceptoEn: "UGREEN HiTune Max2 white headphones (PN 45017)", cantidad: 1, usd: 26.14 },
+      { concepto: "IVA 16% de los artículos donados", conceptoEn: "16% VAT on donated items", cantidad: 1, usd: 17.00 },
+    ]
+  },
 ];
 
 /* ---- sample data shown only in demo mode (clearly labeled) ---- */
@@ -611,6 +658,7 @@ const STR = {
     wallEmpty: "El muro está esperando su primer nombre. Sé el primero en hacer esto posible.",
     onBoard: "★ Tablón del campamento",
     anon: "Anónimo",
+    inKindBadge: "Donativo en especie",
     ledgerH: "Registro de donativos",
     ledgerNote: "Cada donativo recibe un folio y un recibo. La columna «Acumulado» va sumando renglón por renglón: cualquiera puede verificar que el total coincide con el contador de arriba.",
     ledgerEmpty: "Aún no hay donativos registrados.",
@@ -625,8 +673,13 @@ const STR = {
     budgetIphone: "iPhone 17 Pro — comprado para el primer lugar",
     budgetOther: "Otros premios",
     budgetNote: "Distribución actualizada de la meta de $25,000 MXN. La compra del iPhone ya aparece en la tabla de gastos; el resto se destinará a otros premios.",
+    inKindH: "Lista de compras y artículos donados",
+    inKindNote: "Artículos aportados directamente para los premios del Enfluss Youth Camp. Su valor está incluido en el folio del patrocinador y en el total recaudado, pero no se registra como gasto en efectivo.",
+    colQty: "Cant.", colUsd: "Valor USD", colMxnValue: "Valor MXN",
+    inKindTotal: "Valor total aportado",
+    inKindMatch: (folio, rate, exact, rounded) => `Incluido en el folio ${folio}. Tipo de cambio: $${rate.toFixed(2)} MXN por USD. Valor exacto: ${exact}; el folio se redondea a ${rounded}.`,
     spendEmpty: "Todavía no hay gastos. Cada gasto se publicará aquí en cuanto ocurra.",
-    availRow: "Disponible (recaudado − gastado)",
+    availRow: "Disponible en efectivo (donativos en efectivo − gastado)",
     howH: "Cómo garantizamos la transparencia",
     how1H: "Cada peso queda registrado",
     how1P: "Todo donativo entra a esta página con folio, fecha y monto el mismo día que se recibe, y el patrocinador se lleva un recibo con ese folio.",
@@ -673,6 +726,7 @@ const STR = {
     wallEmpty: "The wall is waiting for its first name. Be the first to make this happen.",
     onBoard: "★ Camp board",
     anon: "Anonymous",
+    inKindBadge: "In-kind donation",
     ledgerH: "Donation ledger",
     ledgerNote: "Every donation gets a receipt number (folio). The running-total column adds up row by row, so anyone can verify the total matches the counter above.",
     ledgerEmpty: "No donations recorded yet.",
@@ -687,8 +741,13 @@ const STR = {
     budgetIphone: "iPhone 17 Pro — purchased for first place",
     budgetOther: "Other prizes",
     budgetNote: "Updated allocation of the $25,000 MXN goal. The iPhone purchase is recorded in the expense table; the remainder will go toward other prizes.",
+    inKindH: "Purchase and donated-item list",
+    inKindNote: "Items contributed directly as prizes for Enfluss Youth Camp. Their value is included in the sponsor's receipt and the total raised, but is not recorded as a cash expense.",
+    colQty: "Qty.", colUsd: "USD value", colMxnValue: "MXN value",
+    inKindTotal: "Total contributed value",
+    inKindMatch: (folio, rate, exact, rounded) => `Included under receipt ${folio}. Exchange rate: $${rate.toFixed(2)} MXN per USD. Exact value: ${exact}; the receipt is rounded to ${rounded}.`,
     spendEmpty: "No expenses yet. Every expense will be posted here as it happens.",
-    availRow: "Available (raised − spent)",
+    availRow: "Cash available (cash donations − spent)",
     howH: "How we guarantee transparency",
     how1H: "Every peso is on the record",
     how1P: "Each donation is posted to this page with a receipt number, date, and amount the same day it is received, and the sponsor keeps a receipt with that number.",
@@ -708,6 +767,8 @@ let lang = "es";
 
 const fmt = v => new Intl.NumberFormat(STR[lang].locale,
   { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(v);
+const fmtPrecise = v => new Intl.NumberFormat(STR[lang].locale,
+  { style: "currency", currency: "MXN", minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
 
 const fmtDate = iso => {
   const [y, m, d] = iso.split("-").map(Number);
@@ -735,8 +796,10 @@ function render() {
   const sponsors = PATROCINADORES
     .slice().sort((a, b) => a.folio.localeCompare(b.folio));
   const gastos = GASTOS;
+  const donacionesEspecie = DONACIONES_ESPECIE;
 
   const raised = sponsors.reduce((s, p) => s + p.monto, 0);
+  const cashRaised = sponsors.filter(p => p.tipo !== "especie").reduce((s, p) => s + p.monto, 0);
   const spent = gastos.reduce((s, g) => s + g.monto, 0);
   const goal = CONFIG.meta;
   const pct = Math.min(100, raised / goal * 100);
@@ -773,13 +836,15 @@ function render() {
       const logo = p.publico && p.logo
         ? `<div class="logo-box"><img src="${esc(p.logo)}" alt="${esc(p.nombre)} logo" loading="lazy"></div>`
         : "";
-      const tag = onBoard
-        ? `<span class="badge">${esc(t.onBoard)}</span>`
-        : (!p.publico ? `<span class="chip-anon">${esc(t.anon)}</span>` : "");
+      const tags = [
+        onBoard ? `<span class="badge">${esc(t.onBoard)}</span>` : "",
+        !p.publico ? `<span class="chip-anon">${esc(t.anon)}</span>` : "",
+        p.tipo === "especie" ? `<span class="chip-kind">${esc(t.inKindBadge)}</span>` : ""
+      ].join("");
       return `<div class="sponsor${onBoard ? " on-board" : ""}">
         ${logo}
         <span class="${nameCls}">${esc(p.nombre)}</span>
-        <span class="amt">${fmt(p.monto)}</span>${tag}
+        <span class="amt">${fmt(p.monto)}</span>${tags}
       </div>`;
     }).join("");
   }
@@ -799,13 +864,33 @@ function render() {
       return `<tr>
         <td class="folio">${esc(p.folio)}</td>
         <td class="fecha">${esc(fmtDate(p.fecha))}</td>
-        <td><span class="sponsor-line">${logo}<span>${esc(p.nombre)}${star}</span></span></td>
+        <td><span class="sponsor-line">${logo}<span>${esc(p.nombre)}${star}${p.tipo === "especie" ? ` · ${esc(t.inKindBadge)}` : ""}</span></span></td>
         <td class="num">${fmt(p.monto)}</td>
         <td class="num">${fmt(run)}</td>
       </tr>`;
     }).join("");
   }
   document.getElementById("ledgerTotal").textContent = fmt(raised);
+
+  /* donated items — valued support, not cash expenses */
+  const inKindBody = document.getElementById("inKindBody");
+  const inKindRows = donacionesEspecie.flatMap(d => d.items.map(item => ({ ...item, donation: d })));
+  inKindBody.innerHTML = inKindRows.map(({ donation, ...item }) => `<tr>
+    <td><strong>${esc(donation.patrocinador)}</strong><div class="kind-source">${esc(donation.folio)} · ${esc(fmtDate(donation.fecha))}</div></td>
+    <td>${esc(lang === "en" && item.conceptoEn ? item.conceptoEn : item.concepto)}</td>
+    <td class="num">${item.cantidad}</td>
+    <td class="num">US$${item.usd.toFixed(2)}</td>
+    <td class="num">${fmtPrecise(item.usd * donation.tipoCambio)}</td>
+  </tr>`).join("");
+  const totalInKindUsd = donacionesEspecie.reduce((sum, d) => sum + d.items.reduce((s, item) => s + item.usd, 0), 0);
+  const totalInKindMxnExact = donacionesEspecie.reduce((sum, d) => sum + d.items.reduce((s, item) => s + item.usd, 0) * d.tipoCambio, 0);
+  const totalInKindMxn = Math.round(totalInKindMxnExact);
+  document.getElementById("inKindUsdTotal").textContent = `US$${totalInKindUsd.toFixed(2)}`;
+  document.getElementById("inKindMxnTotal").textContent = fmtPrecise(totalInKindMxnExact);
+  const latestInKind = donacionesEspecie[donacionesEspecie.length - 1];
+  document.getElementById("inKindMatchNote").textContent = latestInKind
+    ? t.inKindMatch(latestInKind.folio, latestInKind.tipoCambio, fmtPrecise(totalInKindMxnExact), fmt(totalInKindMxn))
+    : "";
 
   /* expenses */
   const sBody = document.getElementById("spendBody");
@@ -818,7 +903,7 @@ function render() {
       <td class="num">${fmt(g.monto)}</td>
     </tr>`).join("");
   }
-  document.getElementById("availTotal").textContent = fmt(raised - spent);
+  document.getElementById("availTotal").textContent = fmt(cashRaised - spent);
 }
 
 document.getElementById("langBtn").addEventListener("click", () => {
